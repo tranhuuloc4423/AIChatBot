@@ -6,7 +6,17 @@ module.exports = {
         "./screens/**/*.{js,jsx,ts,tsx}",
     ],
     theme: {
-        extend: {},
+        extend: {
+            colors: {
+                primary: '#6849ff',
+                second: '#ffc207',
+                'black-100': '#191A1F',
+                'black-200': '#1f222b',
+                'black-300': '#2b2c31',
+                'black-400': '#36373c',
+                'gray-100': '#8c8d91',
+            }
+        },
     },
     plugins: [],
 };

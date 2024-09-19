@@ -11,8 +11,8 @@ const Button = ({
     className?: string;
 }) => {
     return (
-        <TouchableOpacity className={`bg-white rounded-lg py-4 ${className}`}>
-            <Text className="text-black text-center">{label}</Text>
+        <TouchableOpacity className={`bg-white rounded-lg py-4 ${className}`} onPress={onPress}>
+            <Text className="text-primary text-center font-semibold text-xl">{label}</Text>
         </TouchableOpacity>
     );
 };

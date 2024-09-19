@@ -11,20 +11,23 @@ const Input = ({
     inputProps?: TextInputProps;
     onChange: (e: string) => void;
     value: any;
-    iconRight?: FC;
+    iconRight?: any;
     className?: string;
 }) => {
     return (
         <View
-            className={`flex bg-red-400 border border-gray-600 flex-row items-center justify-between px-4 py-2 rounded-lg ${className}`}
+            className={`flex bg-black-200 border border-gray-600 flex-row items-center justify-between px-4 py-2 rounded-lg ${className}`}
         >
             <TextInput
-                className="w-full"
+                className="flex-1 text-white"
                 onChangeText={onChange}
                 value={value}
                 {...inputProps}
+                placeholderTextColor={'white'}
             />
-            {iconRight && <View>{React.createElement(iconRight)}</View>}
+            <View >
+                {iconRight}
+            </View>
         </View>
     );
 };
