@@ -1,10 +1,12 @@
 import axios from 'axios'
-import { apiKey } from './constants/index.js'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const client = axios.create({
   headers: {
     // Authorization: 'Bearer' + apiKey,
-    Authorization: `Bearer ${apiKey}`,
+    Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
     'content-type': 'application/json'
   }
 })
