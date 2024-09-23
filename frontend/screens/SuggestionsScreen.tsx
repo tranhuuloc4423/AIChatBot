@@ -47,7 +47,7 @@ const SuggestionsScreen = () => {
             </View>
 
             <View className='flex flex-row items-center justify-between'>
-                <Text className='text-3xl font-semibold text-white'>Suggestions</Text>
+                <Text className='text-3xl font-semibold text-white'>Suggestions test</Text>
                 <TouchableOpacity>
                 <Text className='font-semibold text-primary text-xl'>View all</Text>
 
