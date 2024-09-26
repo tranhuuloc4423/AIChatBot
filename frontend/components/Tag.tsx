@@ -17,7 +17,7 @@ const Tag = ({
   return (
     <View>
       <TouchableOpacity
-        className={`px-4 py-2 flex flex-row items-center rounded-lg ${
+        className={`px-4 mr-3 py-2 flex flex-row items-center rounded-lg ${
           active ? 'bg-primary' : 'bg-black-300'
         } ${className}`}
         onPress={onPress}
