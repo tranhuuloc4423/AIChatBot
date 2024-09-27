@@ -5,6 +5,8 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import WelcomeScreen from "./screens/WelcomScreen";
 import SuggestionsScreen from "./screens/SuggestionsScreen";
+import SettingScreen from "./screens/SettingScreen";
+import LanguageScreen from "./screens/Setting/LanguageScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -12,7 +14,7 @@ export default function App() {
     return (
         <NavigationContainer>
             <Stack.Navigator
-                initialRouteName="Suggestions"
+                initialRouteName="Language"
                 screenOptions={{ headerShown: false }}
             >
                 <Stack.Screen name="Home" component={HomeScreen} />
@@ -20,6 +22,8 @@ export default function App() {
                 <Stack.Screen name="Register" component={RegisterScreen} />
                 <Stack.Screen name="Welcome" component={WelcomeScreen} />
                 <Stack.Screen name="Suggestions" component={SuggestionsScreen} />
+                <Stack.Screen name="Setting" component={SettingScreen} />
+                <Stack.Screen name="Language" component={LanguageScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );
