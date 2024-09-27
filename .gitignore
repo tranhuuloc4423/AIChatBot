@@ -32,6 +32,7 @@ backend/node_modules/
 backend/dist/
 backend/build/
 backend/.env
+backend/serviceAccountKey.json
 
 # Frontend specific ignores
 frontend/node_modules/
