@@ -13,7 +13,18 @@ const client = axios.create({
 const chatGptEndpoint = 'https://api.openai.com/v1/chat/completions'
 const dalleEndpoint = 'https://api.openai.com/v1/images/generations'
 
+const MAX_REQUESTS_PER_SECOND = 1
+let lastRequestTime = 0
+
 export const apiCall = async (prompt, messages) => {
+  const now = Date.now()
+  const delay = Math.max(
+    0,
+    lastRequestTime + 1000 / MAX_REQUESTS_PER_SECOND - now
+  )
+  await new Promise((resolve) => setTimeout(resolve, delay))
+  lastRequestTime = now
+
   try {
     const res = await client.post(chatGptEndpoint, {
       model: 'gpt-3.5-turbo',
