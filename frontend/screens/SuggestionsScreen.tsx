@@ -7,7 +7,11 @@ import Tag from '../components/Tag'
 const SuggetItem = () => {
 
     return (
-        <View className='flex flex-row items-center justify-around'>
+        <ScrollView className='w-screen' horizontal={true} showsHorizontalScrollIndicator={false}
+                
+                
+            >
+        <View className='flex pt-4 flex-row pl-8 gap-3 items-center'>
             <View className='w-28 h-28 rounded-lg border border-slate-600 p-2 mt-5  text-white '>
                 <Ionicons className='' name="images-outline"  size={32} color={'#85B6FF'}></Ionicons>
                 <Text className=' text-white text-centerp"'>Create an image for my presentation</Text>
@@ -21,7 +25,13 @@ const SuggetItem = () => {
                 <Text className=' text-white text-centerp"'>Create a story for my favorite game</Text>
 
             </View>
+            <View className='w-28 h-28 rounded-lg border border-slate-600 p-2 mt-5  text-white '>
+                <Ionicons className='' name="airplane-outline"  size={32} color={'#ff38dd'}></Ionicons>
+                <Text className=' text-white text-centerp"'>Create a story for my books, or movies</Text>
+
+            </View>
         </View>
+        </ScrollView>
     )
    
 }
@@ -59,16 +69,16 @@ const SuggestionsScreen = () => {
 
     
   return (
-    <View className='bg-black-100 pt-20 px-8 h-screen w-screen'>
+    <View className='bg-black-100 pt-20 h-screen w-screen'>
         <View className='flex flex-col gap-4'>
             <View>
-                <Text className='text-4xl font-semibold text-white'>Chat AI</Text>
+                <Text className='text-4xl px-4 font-semibold text-white '>Chat AI</Text>
             </View>
-            <ScrollView className='w-screen' horizontal={true} showsHorizontalScrollIndicator={false}
+            <ScrollView className='w-screen ' horizontal={true} showsHorizontalScrollIndicator={false}
                 
                 
             >
-                <View className='flex flex-row items-center'>
+                <View className='flex flex-row pl-4 items-center'>
                     {tags.map((tag, index) => (
                         <Tag onPress={() => handleTag(index)} label={tag.name} icon={tag.icon} active={tag.active}/>
                         
@@ -78,18 +88,18 @@ const SuggestionsScreen = () => {
             </ScrollView>
 
             <View className='flex flex-row items-center justify-between'>
-                <Text className='text-3xl font-semibold text-white'>Suggestions</Text>
+                <Text className='text-3xl pl-4  font-semibold text-white'>Suggestions</Text>
                 <TouchableOpacity>
-                <Text className='font-semibold text-primary text-xl'>View all</Text>
+                <Text className='font-semibold pr-4 text-primary text-xl'>View all</Text>
 
                 </TouchableOpacity>
             </View>
             <SuggetItem/>
 
             <View className='flex flex-row items-center justify-between'>
-                <Text className='text-3xl font-semibold text-white'>Prompt library</Text>
+                <Text className='text-3xl pl-4 font-semibold text-white'>Prompt library</Text>
                 <TouchableOpacity>
-                <Text className='font-semibold text-primary text-xl'>View all</Text>
+                <Text className='font-semibold pr-4 text-primary text-xl'>View all</Text>
 
                 </TouchableOpacity>
             </View>
