@@ -8,6 +8,7 @@ import SuggestionsScreen from './screens/SuggestionsScreen'
 import SettingScreen from './screens/SettingScreen'
 import LanguageScreen from './screens/Setting/LanguageScreen'
 import HistoryScreen from './screens/HistoryScreen'
+import ChatScreen from './screens/ChatScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -15,10 +16,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Suggestions"
+        initialRouteName="Chat"
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Chat" component={ChatScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
