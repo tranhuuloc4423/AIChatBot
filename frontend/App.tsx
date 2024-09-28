@@ -7,6 +7,8 @@ import WelcomeScreen from './screens/WelcomScreen'
 import SuggestionsScreen from './screens/SuggestionsScreen'
 import SettingScreen from './screens/SettingScreen'
 import LanguageScreen from './screens/Setting/LanguageScreen'
+import TermScreen from './screens/Setting/TermScreen'
+import AboutScreen from './screens/Setting/AboutScreen'
 import HistoryScreen from './screens/HistoryScreen'
 import ChatScreen from './screens/ChatScreen'
 
@@ -16,7 +18,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Chat"
+        initialRouteName="Setting"
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Home" component={HomeScreen} />
@@ -27,6 +29,8 @@ export default function App() {
         <Stack.Screen name="Suggestions" component={SuggestionsScreen} />
         <Stack.Screen name="Setting" component={SettingScreen} />
         <Stack.Screen name="Language" component={LanguageScreen} />
+        <Stack.Screen name="Term" component={TermScreen} />
+        <Stack.Screen name="About" component={AboutScreen} />
         <Stack.Screen name="History" component={HistoryScreen} />
       </Stack.Navigator>
     </NavigationContainer>
