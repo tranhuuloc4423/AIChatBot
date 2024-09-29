@@ -11,3 +11,4 @@ const HomeScreen = ({ navigation }: RouterProps) => {
 };
 
 export default HomeScreen;
+
