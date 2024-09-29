@@ -1,28 +1,12 @@
-import { db } from '../firebaseConfig.js'
+import mongoose from 'mongoose'
 
-export const Conversation = {
-  async findOneAndUpdate(userId, update, options) {
-    const docRef = db.collection('conversations').doc(userId)
-    const doc = await docRef.get()
-
-    if (doc.exists) {
-      await docRef.update(update)
-    } else {
-      await docRef.set(update)
-    }
-    return docRef
+const conversationSchema = new mongoose.Schema(
+  {
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    title: { type: String },
+    messageIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }]
   },
+  { timestamps: true }
+)
 
-  async find(query) {
-    const snapshot = await db
-      .collection('conversations')
-      .where('userId', '==', query.userId)
-      .get()
-    return snapshot.docs.map((doc) => doc.data())
-  },
-
-  async findByIdAndUpdate(conversationId, update) {
-    const docRef = db.collection('conversations').doc(conversationId)
-    await docRef.update(update)
-  }
-}
+export const Conversation = mongoose.model('Conversation', conversationSchema)

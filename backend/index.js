@@ -1,86 +1,51 @@
-import axios from 'axios'
+import express from 'express'
+import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import { CohereClientV2 } from 'cohere-ai'
+import authRoutes from './routes/authRoutes.js'
+import chatRoutes from './routes/chatRoutes.js'
+import { verifyToken } from './controllers/authControllers.js'
 
 dotenv.config()
 
-const client = axios.create({
-  headers: {
-    Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-    'content-type': 'application/json'
-  }
+const app = express()
+app.use(express.json())
+
+app.use('/auth', authRoutes)
+app.use('/chat', verifyToken, chatRoutes)
+
+const cohere = new CohereClientV2({
+  token: process.env.COHERE_API_KEY
 })
 
-const chatGptEndpoint = 'https://api.openai.com/v1/chat/completions'
-const dalleEndpoint = 'https://api.openai.com/v1/images/generations'
-
-const MAX_REQUESTS_PER_SECOND = 1
-let lastRequestTime = 0
-
-export const apiCall = async (prompt, messages) => {
-  const now = Date.now()
-  const delay = Math.max(
-    0,
-    lastRequestTime + 1000 / MAX_REQUESTS_PER_SECOND - now
+mongoose
+  .connect(
+    process.env.MONGODB_URI ||
+      'mongodb+srv://admin:123@cluster111.spvzwma.mongodb.net/',
+    {}
   )
-  await new Promise((resolve) => setTimeout(resolve, delay))
-  lastRequestTime = now
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((err) => console.error('Failed to connect to MongoDB', err))
 
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`)
+})
+
+export const cohereApiCall = async (message) => {
   try {
-    const res = await client.post(chatGptEndpoint, {
-      model: 'gpt-3.5-turbo',
+    const response = await cohere.chat({
+      model: 'command-r-plus',
       messages: [
         {
           role: 'user',
-          content: prompt
+          content: message
         }
       ]
     })
-
-    //console.log('Data: ',res.data.choices[0].message)
-    let isArt = res.data?.choices[0]?.message?.content
-
-    if (isArt.toLowerCase().includes('yes')) {
-      console.log('dalle api call')
-      return dalleApiCall(prompt, messages || [])
-    } else {
-      console.log('chatgpt api call')
-      return chatgptApiCall(prompt, messages || [])
-    }
+    // console.log('Cohere API response:', response.message.content)
+    return response
   } catch (err) {
-    console.log('Error:', err)
-    return Promise.resolve({ success: false, msg: err.message })
-  }
-}
-
-const chatgptApiCall = async (prompt, messages) => {
-  try {
-    const res = await client.post(chatGptEndpoint, {
-      model: 'gpt-3.5-turbo',
-      messages
-    })
-
-    let answer = res.data?.choices[0]?.message?.content
-    messages.push({ role: 'assistant', content: answer.trim() })
-    return Promise.resolve({ success: true, data: messages })
-  } catch (err) {
-    console.log('Error:', err)
-    return Promise.resolve({ success: false, msg: err.message })
-  }
-}
-
-const dalleApiCall = async (prompt, messages) => {
-  try {
-    const res = await client.post(dalleEndpoint, {
-      prompt: prompt,
-      n: 1,
-      size: '512x512'
-    })
-    let url = res?.data?.data[0]?.url
-    console.log('Url: ', url)
-    messages.push({ role: 'assistant', content: url })
-    return Promise.resolve({ success: true, data: messages })
-  } catch (err) {
-    console.log('Error:', err)
-    return Promise.resolve({ success: false, msg: err.message })
+    return { success: false, msg: 'Cohere API call failed' }
   }
 }

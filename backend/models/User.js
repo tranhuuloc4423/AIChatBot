@@ -1,18 +1,9 @@
-import { db } from '../firebaseConfig.js'
+import mongoose from 'mongoose'
 
-export const User = {
-  async findOne(username) {
-    const snapshot = await db
-      .collection('users')
-      .where('username', '==', username)
-      .get()
-    if (snapshot.empty) return null
-    return snapshot.docs[0].data()
-  },
+const userSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  conversations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Conversation' }]
+})
 
-  async create(username, password) {
-    const docRef = db.collection('users').doc()
-    await docRef.set({ username, password })
-    return docRef.id
-  }
-}
+export const User = mongoose.model('User', userSchema)
