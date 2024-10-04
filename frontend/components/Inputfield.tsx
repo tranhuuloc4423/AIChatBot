@@ -1,13 +1,7 @@
-import {
-  View,
-  KeyboardAvoidingView,
-  Text,
-  TextInput,
-  TextInputProps
-} from 'react-native'
+import { View, TextInput, TextInputProps } from 'react-native'
 import React, { FC } from 'react'
 
-const Input = ({
+const Inputfield = ({
   inputProps,
   onChange,
   value,
@@ -22,17 +16,18 @@ const Input = ({
 }) => {
   return (
     <View
-      className={`flex bg-black-200 border w-full border-gray-600 flex-row items-center justify-between  py-2 px-4 rounded-lg ${className}`}
+      className={`flex bg-black-200 border border-gray-600 justify-between items-center flex-row p-4 pr-10 rounded-lg ${className}`}
     >
       <TextInput
-        className="flex-1 text-white w-full"
+        className="w-full text-white text-base font-medium"
         onChangeText={onChange}
         value={value}
         {...inputProps}
         placeholderTextColor={'white'}
       />
+      {iconRight}
     </View>
   )
 }
 
-export default Input
+export default Inputfield

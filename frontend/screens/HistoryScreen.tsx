@@ -6,62 +6,44 @@ import {
   TouchableOpacity,
   ScrollView
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import Tag from '../components/Tag'
 import Input from '../components/Input'
 import HistoryLable from '../components/HistoryLable'
-
+import Tags from '../components/Tags'
+import { RouterProps } from '../types/navigation'
+import { useAppSelector } from '../redux/customHooks'
+import axios from '../axiosInstance'
+import { useFocusEffect } from '@react-navigation/native'
 const TopicsTags = () => {
   return <View></View>
 }
 
-const HistoryScreen = () => {
-  const [tags, setTags] = useState([
-    {
-      name: 'Chat',
-      icon: (
-        <View className="rounded-full p-1 bg-white">
-          <Ionicons
-            name="chatbubble-ellipses-outline"
-            size={28}
-            color={'black'}
-          />
-        </View>
-      ),
-      path: '',
-      active: true
-    },
-    {
-      name: 'History',
-      icon: (
-        <View className="rounded-full p-1 bg-white">
-          <Ionicons name="time-outline" size={28} color={'black'} />
-        </View>
-      ),
-      path: '',
-      active: false
-    },
-    {
-      name: 'Settings',
-      icon: (
-        <View className="rounded-full p-1 bg-white">
-          <Ionicons name="settings-outline" size={28} color={'black'} />
-        </View>
-      ),
-      path: '',
-      active: false
-    }
-  ])
+const HistoryScreen = ({ navigation }: RouterProps) => {
+  const user = useAppSelector((state) => state.app.user)
+  const token = useAppSelector((state) => state.app.token)
+  const [history, setHistory] = useState([])
 
-  const handleTag = (index: number) => {
-    const updatedTags = tags.map((tag, i) => ({
-      ...tag,
-      active: i === index
-    }))
-    setTags(updatedTags)
+  const getHistory = async () => {
+    try {
+      const res = await axios.get('/chat/history', {
+        headers: {
+          Authorization: token
+        },
+        params: {
+          email: user.email
+        }
+      })
+      setHistory(res.data)
+    } catch (error) {
+      console.log(error)
+    }
   }
-  const [text, setText] = useState('')
+
+  useEffect(() => {
+    getHistory()
+  }, [])
 
   return (
     <KeyboardAvoidingView
@@ -85,16 +67,7 @@ const HistoryScreen = () => {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
           >
-            <View className="flex flex-row pl-4 items-center">
-              {tags.map((tag, index) => (
-                <Tag
-                  onPress={() => handleTag(index)}
-                  label={tag.name}
-                  icon={tag.icon}
-                  active={tag.active}
-                />
-              ))}
-            </View>
+            <Tags navigation={navigation} />
           </ScrollView>
           <View className="flex flex-row items-center justify-between">
             <Text className="text-3xl pl-4  font-semibold text-white">
@@ -102,18 +75,9 @@ const HistoryScreen = () => {
             </Text>
           </View>
           <View className="">
-            <HistoryLable text="Test" />
-            <HistoryLable text="Test" />
-
-            <HistoryLable text="Test" />
-            <HistoryLable text="Test" />
-            <HistoryLable text="Test" />
-            <HistoryLable text="Test" />
-            <HistoryLable text="Test" />
-            <HistoryLable text="Test" />
-            <HistoryLable text="Test" />
-            <HistoryLable text="Test" />
-            <HistoryLable text="Test" />
+            {history?.map((item: any) => (
+              <HistoryLable key={item._id} text={item.title} />
+            ))}
           </View>
         </View>
       </ScrollView>

@@ -6,11 +6,62 @@ import {
   TouchableOpacity,
   ScrollView
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import Tag from '../components/Tag'
 import Input from '../components/Input'
 import PromptLib from '../components/Promt'
+import Tags from '../components/Tags'
+import { RouterProps } from '../types/navigation'
+import { ReactReduxContextValue, useSelector } from 'react-redux'
+import { useAppSelector } from '../redux/customHooks'
+import { useFocusEffect } from '@react-navigation/native'
+
+const suggestions = [
+  {
+    id: 0,
+    text: 'Create an image for my presentation',
+    icon: (
+      <Ionicons
+        className=""
+        name="images-outline"
+        size={32}
+        color={'#85B6FF'}
+      />
+    )
+  },
+  {
+    id: 1,
+    text: 'Content calendar for tiktok',
+    icon: (
+      <Ionicons
+        className=""
+        name="calendar-outline"
+        size={32}
+        color={'#4ECB71'}
+      />
+    )
+  },
+  {
+    id: 2,
+    text: 'Create a story for my favorite game',
+    icon: (
+      <Ionicons className="" name="bulb-outline" size={32} color={'#FFD233'} />
+    )
+  },
+  {
+    id: 3,
+    text: 'Create a story for my books, or movies',
+    icon: (
+      <Ionicons
+        className=""
+        name="airplane-outline"
+        size={32}
+        color={'#ff38dd'}
+      />
+    )
+  }
+]
 const SuggetItem = () => {
   return (
     <ScrollView
@@ -18,61 +69,15 @@ const SuggetItem = () => {
       horizontal={true}
       showsHorizontalScrollIndicator={false}
     >
-      <View className="flex flex-row pl-4 gap-3 items-center">
-        <TouchableOpacity>
-          <View className="w-28 h-28 rounded-lg border border-slate-600 p-2 mt-5  text-white ">
-            <Ionicons
-              className=""
-              name="images-outline"
-              size={32}
-              color={'#85B6FF'}
-            ></Ionicons>
-            <Text className=' text-white text-centerp"'>
-              Create an image for my presentation
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <View className="w-28 h-28 rounded-lg border border-slate-600 p-2 mt-5  text-white ">
-            <Ionicons
-              className=""
-              name="calendar-outline"
-              size={32}
-              color={'#4ECB71'}
-            ></Ionicons>
-            <Text className=' text-white text-centerp"'>
-              Content calendar for tiktok
-            </Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-          <View className="w-28 h-28 rounded-lg border border-slate-600 p-2 mt-5  text-white ">
-            <Ionicons
-              className=""
-              name="bulb-outline"
-              size={32}
-              color={'#FFD233'}
-            ></Ionicons>
-            <Text className=' text-white text-centerp"'>
-              Create a story for my favorite game
-            </Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-          <View className="w-28 h-28 rounded-lg border border-slate-600 p-2 mt-5  text-white ">
-            <Ionicons
-              className=""
-              name="airplane-outline"
-              size={32}
-              color={'#ff38dd'}
-            ></Ionicons>
-            <Text className=' text-white text-centerp"'>
-              Create a story for my books, or movies
-            </Text>
-          </View>
-        </TouchableOpacity>
+      <View className="flex flex-row px-4 gap-3 items-center">
+        {suggestions.map((item) => (
+          <TouchableOpacity key={item.id}>
+            <View className="w-28 h-28 rounded-lg border border-slate-600 p-2 mt-5  text-white ">
+              {item.icon}
+              <Text className=' text-white text-centerp"'>{item.text}</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
       </View>
     </ScrollView>
   )
@@ -151,58 +156,26 @@ const Promtlibs = () => {
   )
 }
 
-const SuggestionsScreen = () => {
-  const [tags, setTags] = useState([
-    {
-      name: 'Chat',
-      icon: (
-        <View className="rounded-full p-1 bg-white">
-          <Ionicons
-            name="chatbubble-ellipses-outline"
-            size={28}
-            color={'black'}
-          />
-        </View>
-      ),
-      path: '',
-      active: true
-    },
-    {
-      name: 'History',
-      icon: (
-        <View className="rounded-full p-1 bg-white">
-          <Ionicons name="time-outline" size={28} color={'black'} />
-        </View>
-      ),
-      path: '',
-      active: false
-    },
-    {
-      name: 'Settings',
-      icon: (
-        <View className="rounded-full p-1 bg-white">
-          <Ionicons name="settings-outline" size={28} color={'black'} />
-        </View>
-      ),
-      path: '',
-      active: false
-    }
-  ])
-
-  const handleTag = (index: number) => {
-    const updatedTags = tags.map((tag, i) => ({
-      ...tag,
-      active: i === index
-    }))
-    setTags(updatedTags)
-  }
+const SuggestionsScreen = ({ navigation }: RouterProps) => {
   const [text, setText] = useState('')
+  const user = useAppSelector((state) => state.app.user)
+  const token = useAppSelector((state) => state.app.token)
 
+  console.log(user)
+  console.log(token)
+
+  useEffect(() => {
+    if (!user || !token) {
+      console.log('User or token is null')
+    } else {
+      console.log('User and token:', user, token)
+    }
+  }, [user, token])
   return (
     <KeyboardAvoidingView
       behavior="padding"
       keyboardVerticalOffset={0}
-      className="bg-black-100 flex-1 justify-between pt-20 h-screen w-screen"
+      className="bg-black-100 flex-1 justify-between pt-10 h-screen w-screen"
     >
       <ScrollView
         className=" h-screen w-screen"
@@ -215,22 +188,7 @@ const SuggestionsScreen = () => {
               Chat AI
             </Text>
           </View>
-          <ScrollView
-            className="w-screen "
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-          >
-            <View className="flex flex-row pl-4 items-center">
-              {tags.map((tag, index) => (
-                <Tag
-                  onPress={() => handleTag(index)}
-                  label={tag.name}
-                  icon={tag.icon}
-                  active={tag.active}
-                />
-              ))}
-            </View>
-          </ScrollView>
+          <Tags navigation={navigation} />
 
           <View className="flex flex-row items-center justify-between">
             <Text className="text-3xl pl-4  font-semibold text-white">

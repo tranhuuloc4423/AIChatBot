@@ -46,7 +46,22 @@ export const loginUser = async (req, res) => {
       expiresIn: '2h'
     })
 
-    res.json({ msg: 'Đăng nhập thành công', token })
+    res.json({ msg: 'Đăng nhập thành công', user, token })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ msg: 'Internal server error' })
+  }
+}
+
+export const getById = async (req, res) => {
+  const { email } = req.body
+
+  try {
+    const user = await User.findOne({ email })
+    if (!user) {
+      return res.status(404).json({ msg: 'Không tìm thấy người dùng' })
+    }
+    res.status(200).json(user)
   } catch (error) {
     console.error(error)
     res.status(500).json({ msg: 'Internal server error' })

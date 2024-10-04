@@ -1,5 +1,5 @@
-import { NavigationProp } from "@react-navigation/native";
+import { NavigationProp } from '@react-navigation/native'
 
 export interface RouterProps {
-    navigation: NavigationProp<any, any>;
+  navigation: NavigationProp<any, any>
 }
