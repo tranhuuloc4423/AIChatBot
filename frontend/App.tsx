@@ -11,6 +11,7 @@ import TermScreen from './screens/Setting/TermScreen'
 import AboutScreen from './screens/Setting/AboutScreen'
 import HistoryScreen from './screens/HistoryScreen'
 import ChatScreen from './screens/ChatScreen'
+import CreateConScreen from './screens/CreateConScreen'
 import store from './redux/store'
 import { Provider } from 'react-redux'
 
@@ -35,6 +36,7 @@ export default function App() {
           <Stack.Screen name="Term" component={TermScreen} />
           <Stack.Screen name="About" component={AboutScreen} />
           <Stack.Screen name="History" component={HistoryScreen} />
+          <Stack.Screen name="CreateCons" component={CreateConScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

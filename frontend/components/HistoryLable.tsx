@@ -1,14 +1,14 @@
-import { View, Text } from 'react-native'
+import { Text, Pressable } from 'react-native'
 import React from 'react'
 interface Lable {
   text: string // Define the type for the text prop
 }
 
-const HistoryLable: React.FC<Lable> = ({ text }) => {
+const HistoryLable = ({ text, onClick }: {text: string, onClick: () => void}) => {
   return (
-    <View className="w-5/6  ml-auto mb-2 mr-auto border border-gray-500 rounded-lg p-3 bg-neutral-900 ">
+    <Pressable onPress={onClick} className="w-full  ml-auto mb-2 mr-auto border bg-black-200 border-gray-500 rounded-lg p-3">
       <Text className="text-2xl text-white">{text}</Text>
-    </View>
+    </Pressable>
   )
 }
 

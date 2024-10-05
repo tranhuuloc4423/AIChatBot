@@ -3,13 +3,7 @@ import { useState } from 'react'
 import { View, ScrollView, Pressable } from 'react-native'
 import Tag from './Tag'
 import { RouterProps } from '../types/navigation'
-import axios from '../axiosInstance'
-import { setNewConversation, setToken } from '../redux/slices/appSlice'
-import { useAppDispatch, useAppSelector } from '../redux/customHooks'
 const Tags = ({ navigation }: RouterProps) => {
-  const dispatch = useAppDispatch()
-  const user = useAppSelector((state) => state.app.user)
-  const token = useAppSelector((state) => state.app.token)
   const [tags, setTags] = useState([
     {
       name: 'Chat',
@@ -22,7 +16,7 @@ const Tags = ({ navigation }: RouterProps) => {
           />
         </View>
       ),
-      path: 'Chat',
+      path: 'CreateCons',
       active: false
     },
     {

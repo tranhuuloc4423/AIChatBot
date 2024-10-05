@@ -7,18 +7,11 @@ import {
   ScrollView
 } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Ionicons } from '@expo/vector-icons'
-import Tag from '../components/Tag'
-import Input from '../components/Input'
 import HistoryLable from '../components/HistoryLable'
 import Tags from '../components/Tags'
 import { RouterProps } from '../types/navigation'
 import { useAppSelector } from '../redux/customHooks'
 import axios from '../axiosInstance'
-import { useFocusEffect } from '@react-navigation/native'
-const TopicsTags = () => {
-  return <View></View>
-}
 
 const HistoryScreen = ({ navigation }: RouterProps) => {
   const user = useAppSelector((state) => state.app.user)
@@ -49,14 +42,14 @@ const HistoryScreen = ({ navigation }: RouterProps) => {
     <KeyboardAvoidingView
       behavior="padding"
       keyboardVerticalOffset={0}
-      className="bg-black-100 flex-1 justify-between pt-20 h-screen w-screen"
+      className="bg-black-100 flex-1 justify-between pt-20 h-screen w-screen px-4"
     >
       <ScrollView
         className=" h-screen w-screen"
         showsVerticalScrollIndicator={true}
         horizontal={false}
       >
-        <View className="flex flex-col gap-4">
+        <View className="flex flex-col gap-4 w-full">
           <View>
             <Text className="text-4xl px-4 font-semibold text-white ">
               Chat AI
@@ -76,7 +69,7 @@ const HistoryScreen = ({ navigation }: RouterProps) => {
           </View>
           <View className="">
             {history?.map((item: any) => (
-              <HistoryLable key={item._id} text={item.title} />
+              <HistoryLable key={item._id} text={item.title} onClick={() => navigation.navigate("Chat", { conversationId: item._id, title: item?.title})} />
             ))}
           </View>
         </View>

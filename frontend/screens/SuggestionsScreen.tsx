@@ -15,7 +15,6 @@ import Tags from '../components/Tags'
 import { RouterProps } from '../types/navigation'
 import { ReactReduxContextValue, useSelector } from 'react-redux'
 import { useAppSelector } from '../redux/customHooks'
-import { useFocusEffect } from '@react-navigation/native'
 
 const suggestions = [
   {
@@ -62,6 +61,17 @@ const suggestions = [
     )
   }
 ]
+
+const promts = [
+  { icon: 'sunny-sharp', label: '3D Artist Artist' },
+  { icon: 'apps', label: 'UX/UI Design' },
+  { icon: 'american-football', label: 'Web design' },
+  { icon: 'basketball', label: '3D Artist' },
+  { icon: 'boat', label: '3D Artist' },
+  { icon: 'cash', label: '3D Artist' },
+  { icon: 'cut', label: '3D Artist' },
+  { icon: 'game-controller', label: '3D Artist Artist Artist' }
+]
 const SuggetItem = () => {
   return (
     <ScrollView
@@ -85,79 +95,36 @@ const SuggetItem = () => {
 
 const Promtlibs = () => {
   return (
-    <ScrollView
-      className="flex pt-4 flex-row pl-8 gap-1 z-10 "
-      horizontal={true}
-      showsHorizontalScrollIndicator={false}
+    < View
+      className="flex flex-col pt-4 pl-8 z-10 "
     >
-      <View className="flex flex-col gap-2">
-        <View className=" py-4 px-3   rounded-lg flex flex-row  bg-slate-700">
-          <Ionicons
-            name="sunny-sharp"
-            className=""
-            size={32}
-            color={'#FCEA2B'}
-          />
-          <Text className="text-2xl text-white ml-2">3D Artist Artist</Text>
-        </View>
-        <View className=" py-4 px-3  rounded-lg flex flex-row  bg-slate-700">
-          <Ionicons name="apps" className="" size={32} color={'#FCEA2B'} />
-          <Text className="text-2xl text-white ml-2">3D Artist</Text>
-        </View>
-      </View>
-      <View className="flex flex-col gap-2">
-        <View className=" py-4 px-3   rounded-lg flex flex-row  bg-slate-700">
-          <Ionicons
-            name="american-football"
-            className=""
-            size={32}
-            color={'#FCEA2B'}
-          />
-          <Text className="text-2xl text-white ml-2">3D Artist</Text>
-        </View>
-        <View className=" py-4 px-3  rounded-lg flex flex-row  bg-slate-700">
-          <Ionicons
-            name="basketball"
-            className=""
-            size={32}
-            color={'#FCEA2B'}
-          />
-          <Text className="text-2xl text-white ml-2">3D Artist</Text>
-        </View>
-      </View>
-      <View className="flex flex-col gap-2">
-        <View className=" py-4 px-3  rounded-lg flex flex-row  bg-slate-700">
-          <Ionicons name="boat" className="" size={32} color={'#FCEA2B'} />
-          <Text className="text-2xl text-white ml-2">3D Artist</Text>
-        </View>
-        <View className=" py-4 px-3   rounded-lg flex flex-row  bg-slate-700">
-          <Ionicons name="cash" className="" size={32} color={'#FCEA2B'} />
-          <Text className="text-2xl text-white ml-2">3D Artist</Text>
-        </View>
-      </View>
-      <View className="flex flex-col gap-2">
-        <View className=" py-4 px-3   rounded-lg flex flex-row  bg-slate-700">
-          <Ionicons name="cut" className="" size={32} color={'#FCEA2B'} />
-          <Text className="text-2xl text-white ml-2">3D Artist</Text>
-        </View>
-        <View className=" py-4 px-3  rounded-lg flex flex-row  bg-slate-700">
-          <Ionicons
-            name="game-controller"
-            className=""
-            size={32}
-            color={'#FCEA2B'}
-          />
-          <Text className="text-2xl text-white ml-2">
-            3D Artist Artist Artist
-          </Text>
-        </View>
-      </View>
-    </ScrollView>
+      {/* <ScrollView className="flex flex-row items-center ">
+          {promts?.slice(0, 3).map((item, index) => (
+            <View
+              key={index}
+              className="py-4 px-3 rounded-lg flex flex-row bg-slate-700"
+            >
+              <Ionicons name={`${item.icon}`} size={32} color={'#FCEA2B'} />
+              <Text className="text-2xl text-white ml-2">{item.label}</Text>
+            </View>
+          ))}
+        </ScrollView>
+        <ScrollView className="flex flex-row items-center ">
+          {promts?.slice(4, promts.length - 1).map((item, index) => (
+            <View
+              key={index}
+              className="py-4 px-3 rounded-lg flex flex-row bg-slate-700"
+            >
+              <Ionicons name={`${item.icon}`} size={32} color={'#FCEA2B'} />
+              <Text className="text-2xl text-white ml-2">{item.label}</Text>
+            </View>
+          ))}
+        </ScrollView> */}
+    </View>
   )
 }
 
 const SuggestionsScreen = ({ navigation }: RouterProps) => {
-  const [text, setText] = useState('')
   const user = useAppSelector((state) => state.app.user)
   const token = useAppSelector((state) => state.app.token)
 
@@ -215,15 +182,6 @@ const SuggestionsScreen = ({ navigation }: RouterProps) => {
             </TouchableOpacity>
           </View>
           <Promtlibs />
-        </View>
-        <View className="flex ">
-          <Input
-            value={Text}
-            onChange={setText}
-            inputProps={{ placeholder: 'Ask anything...' }}
-            className=" z-50 "
-            iconRight={<Ionicons name="send" size={24} color="white" />}
-          />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

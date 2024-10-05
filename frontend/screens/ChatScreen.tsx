@@ -13,42 +13,35 @@ import MessageBubble from '../components/MessegeBubble'
 import { RouterProps } from '../types/navigation'
 import { useAppSelector } from '../redux/customHooks'
 import axios from '../axiosInstance'
-import { RouteProp, useRoute } from '@react-navigation/native'
+import { getConversation } from '../redux/api/app'
 
-// Định nghĩa kiểu cho tham số truyền qua navigation
-
-const ChatScreen = ({ navigation }: RouterProps) => {
+const ChatScreen = ({ navigation, route }: RouterProps) => {
   const token = useAppSelector((state) => state.app.token)
-  const usert = useAppSelector((state) => state.app.user)
+  const user = useAppSelector((state) => state.app.user)
+  const {conversationId, title} : any = route?.params
   const [messages, setMessages] = useState([
     { content: 'start conversation!', role: 'assistant' }
   ])
   const [text, setText] = useState('')
   const [loading, setLoading] = useState(false)
-  const [id, setId] = useState('')
   const [loadingDots, setLoadingDots] = useState('.')
   const scrollViewRef = useRef<ScrollView>(null)
 
-  const createNewConversation = async () => {
+  const getConversationById = async () => {
     try {
-      const res = await axios.post(
-        '/chat/new-chat',
-        { email: usert.email, title: 'Untitled Conversation' },
-        {
-          headers: {
-            Authorization: token
-          }
-        }
-      )
-      setId(res.data.conversationId)
+      try {
+        const result = await getConversation(conversationId, token)
+        setMessages(result?.messageIds)
+      } catch (error) {
+        console.log(error)
+      }
     } catch (error) {
       console.log(error)
     }
   }
-
   useEffect(() => {
-    createNewConversation()
-  }, [])
+    getConversationById()
+  }, [conversationId])
 
   useEffect(() => {
     if (scrollViewRef.current) {
@@ -72,7 +65,7 @@ const ChatScreen = ({ navigation }: RouterProps) => {
     try {
       const res = await axios.post(
         '/chat/send-message',
-        { conversationId: id, message: text },
+        { conversationId: conversationId, message: text },
         {
           headers: {
             Authorization: token
@@ -88,7 +81,7 @@ const ChatScreen = ({ navigation }: RouterProps) => {
 
       // update message
       setMessages((prevMessages) => {
-        return prevMessages.map((msg) =>
+        return prevMessages?.map((msg) =>
           msg.role === 'assistant' && msg.content === 'is typing'
             ? assistantMessage
             : msg
@@ -97,7 +90,7 @@ const ChatScreen = ({ navigation }: RouterProps) => {
     } catch (error) {
       console.log('API error:', error)
       setMessages((prevMessages) =>
-        prevMessages.map((msg) =>
+        prevMessages?.map((msg) =>
           msg.role === 'assistant' && msg.content === loadingDots
             ? { ...msg, content: 'Error in response from API' }
             : msg
@@ -116,11 +109,11 @@ const ChatScreen = ({ navigation }: RouterProps) => {
     >
       <View className="flex flex-col gap-4">
         <View className="flex fixed border-b border-gray-600 px-4 pb-2 flex-row justify-between">
-          <Pressable onPress={() => navigation.navigate('Suggestions')}>
+          <Pressable onPress={() => navigation.navigate("Suggestions")}>
             <Ionicons name="close-outline" size={36} color={'white'} />
           </Pressable>
           <Text className="text-4xl px-4 font-semibold text-white ">
-            Chat AI
+            {title}
           </Text>
           <Ionicons
             name="ellipsis-horizontal"
@@ -139,7 +132,7 @@ const ChatScreen = ({ navigation }: RouterProps) => {
         showsVerticalScrollIndicator={true}
         horizontal={false}
       >
-        {messages.map((msg, index) => (
+        {messages?.map((msg, index) => (
           <MessageBubble key={index} content={msg.content} role={msg.role} />
         ))}
       </ScrollView>
