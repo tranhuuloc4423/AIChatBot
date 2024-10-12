@@ -14,7 +14,7 @@ export const newConversation = async (req, res) => {
 
     const newConversation = new Conversation({
       user: user._id,
-      title: title || 'Untitled Conversation',
+      title: title || 'Untitled',
       messageIds: []
     })
 
@@ -23,7 +23,11 @@ export const newConversation = async (req, res) => {
     user.conversations.push(newConversation._id)
     await user.save()
 
-    res.json({ success: true, conversationId: newConversation._id })
+    res.json({
+      success: true,
+      conversationId: newConversation._id,
+      title: newConversation.title
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ msg: 'Internal server error' })
@@ -129,6 +133,28 @@ export const getConversationById = async (req, res) => {
     res.json(conversation)
   } catch (err) {
     console.error('Error while fetching conversation by ID:', err)
+    res.status(500).json({ msg: 'Internal server error' })
+  }
+}
+
+export const updateTitle = async (req, res) => {
+  const { conversationId } = req.params
+  const { title } = req.body
+
+  try {
+    const conversation = await Conversation.findByIdAndUpdate(
+      conversationId,
+      { title: title },
+      { new: true }
+    )
+
+    if (!conversation) {
+      return res.status(404).json({ msg: 'Conversation not found' })
+    }
+
+    res.json({ success: true, updatedTitle: conversation.title })
+  } catch (error) {
+    console.error('Error while updating conversation title:', error)
     res.status(500).json({ msg: 'Internal server error' })
   }
 }

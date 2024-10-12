@@ -2,7 +2,6 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { RouterProps } from '../types/navigation'
-import Tags from '../components/Tags'
 
 const SuggestionsScreen = ({ navigation }: RouterProps) => {
   const supportOptions = [
@@ -27,15 +26,12 @@ const SuggestionsScreen = ({ navigation }: RouterProps) => {
   ]
 
   return (
-    <View className="bg-black-100 pt-20 px-8 h-screen w-screen">
+    <View className="bg-black-100 pt-10 px-8 h-screen w-screen">
       <View className="flex flex-col gap-4">
         <View>
-          <Text className="text-4xl font-semibold text-white">Chat AI</Text>
-        </View>
-        <Tags navigation={navigation} />
-
-        <View>
-          <Text className="text-2xl font-semibold text-white">Support</Text>
+          <Text className="text-3xl text-center font-semibold text-white">
+            Support
+          </Text>
         </View>
 
         {/* Updated Container for Support Options */}

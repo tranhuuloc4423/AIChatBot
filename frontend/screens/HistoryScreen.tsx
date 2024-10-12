@@ -8,7 +8,6 @@ import {
 } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import HistoryLable from '../components/HistoryLable'
-import Tags from '../components/Tags'
 import { RouterProps } from '../types/navigation'
 import { useAppSelector } from '../redux/customHooks'
 import axios from '../axiosInstance'
@@ -42,34 +41,31 @@ const HistoryScreen = ({ navigation }: RouterProps) => {
     <KeyboardAvoidingView
       behavior="padding"
       keyboardVerticalOffset={0}
-      className="bg-black-100 flex-1 justify-between pt-20 h-screen w-screen px-4"
+      className="bg-black-100 flex-1 justify-between w-screen px-4 pt-10"
     >
+      <View>
+        <Text className="text-3xl text-center font-semibold text-white pb-2">
+          Topics
+        </Text>
+      </View>
       <ScrollView
-        className=" h-screen w-screen"
-        showsVerticalScrollIndicator={true}
+        className="h-screen w-full pb-10"
+        showsVerticalScrollIndicator={false}
         horizontal={false}
       >
-        <View className="flex flex-col gap-4 w-full">
-          <View>
-            <Text className="text-4xl px-4 font-semibold text-white ">
-              Chat AI
-            </Text>
-          </View>
-          <ScrollView
-            className="w-screen "
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-          >
-            <Tags navigation={navigation} />
-          </ScrollView>
-          <View className="flex flex-row items-center justify-between">
-            <Text className="text-3xl pl-4  font-semibold text-white">
-              Topics
-            </Text>
-          </View>
+        <View className="flex flex-col gap-4 w-full mx-auto">
           <View className="">
             {history?.map((item: any) => (
-              <HistoryLable key={item._id} text={item.title} onClick={() => navigation.navigate("Chat", { conversationId: item._id, title: item?.title})} />
+              <HistoryLable
+                key={item._id}
+                text={item.title}
+                onClick={() =>
+                  navigation.navigate('Chat', {
+                    conversationId: item._id,
+                    title: item?.title
+                  })
+                }
+              />
             ))}
           </View>
         </View>

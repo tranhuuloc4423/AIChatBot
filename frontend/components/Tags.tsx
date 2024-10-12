@@ -54,7 +54,7 @@ const Tags = ({ navigation }: RouterProps) => {
       horizontal={true}
       showsHorizontalScrollIndicator={false}
     >
-      <View className="flex flex-row items-center p-4">
+      <View className="flex flex-row items-center px-4 py-2">
         {tags.map((tag, index) => (
           <Tag
             key={index}

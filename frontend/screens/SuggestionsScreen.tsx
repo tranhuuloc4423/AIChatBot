@@ -11,7 +11,6 @@ import { Ionicons } from '@expo/vector-icons'
 import Tag from '../components/Tag'
 import Input from '../components/Input'
 import PromptLib from '../components/Promt'
-import Tags from '../components/Tags'
 import { RouterProps } from '../types/navigation'
 import { ReactReduxContextValue, useSelector } from 'react-redux'
 import { useAppSelector } from '../redux/customHooks'
@@ -95,9 +94,7 @@ const SuggetItem = () => {
 
 const Promtlibs = () => {
   return (
-    < View
-      className="flex flex-col pt-4 pl-8 z-10 "
-    >
+    <View className="flex flex-col pt-4 pl-8 z-10 ">
       {/* <ScrollView className="flex flex-row items-center ">
           {promts?.slice(0, 3).map((item, index) => (
             <View
@@ -142,31 +139,17 @@ const SuggestionsScreen = ({ navigation }: RouterProps) => {
     <KeyboardAvoidingView
       behavior="padding"
       keyboardVerticalOffset={0}
-      className="bg-black-100 flex-1 justify-between pt-10 h-screen w-screen"
+      className="bg-black-100 flex-1 justify-between h-screen w-screen pt-10"
     >
       <ScrollView
         className=" h-screen w-screen"
         showsVerticalScrollIndicator={true}
         horizontal={false}
       >
-        <View className="flex flex-col gap-4">
-          <View>
-            <Text className="text-4xl px-4 font-semibold text-white ">
-              Chat AI
-            </Text>
-          </View>
-          <Tags navigation={navigation} />
-
-          <View className="flex flex-row items-center justify-between">
-            <Text className="text-3xl pl-4  font-semibold text-white">
-              Suggestions
-            </Text>
-            <TouchableOpacity>
-              <Text className="font-semibold pr-4 text-primary text-xl">
-                View all
-              </Text>
-            </TouchableOpacity>
-          </View>
+        <View className="flex flex-col gap-2">
+          <Text className="text-3xl pl-4 text-center font-semibold text-white">
+            Suggestions
+          </Text>
           <View>
             <SuggetItem />
           </View>

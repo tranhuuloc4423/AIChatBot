@@ -32,14 +32,14 @@ const teamMembers = [
 
 const TermScreen = ({ navigation }: RouterProps) => {
   return (
-    <View className="bg-gray-900 h-full w-full px-4 pb-4 pt-8">
+    <View className="bg-black-100 h-full w-full px-4 pb-4 pt-8">
       <View className="flex flex-col gap-4">
         <View className="flex-row items-center justify-between">
           <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
             <Ionicons name="chevron-back" size={32} color="white" />
           </TouchableOpacity>
           <View className="flex-1 items-center">
-            <Text className="text-white text-3xl font-semibold">About Us</Text>
+            <Text className="text-white text-2xl font-semibold">About Us</Text>
           </View>
           <View className="w-8"></View>
         </View>

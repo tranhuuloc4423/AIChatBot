@@ -5,16 +5,17 @@ import { RouterProps } from '../../types/navigation'
 
 const TermScreen = ({ navigation }: RouterProps) => {
   return (
-    <View className="bg-gray-900 h-full w-full px-4 pt-8 pb-4">
-      <View className="flex-row items-center mb-4">
+    <View className="bg-black-100 h-full w-full px-4 pt-8 pb-4">
+      <View className="flex-row items-center justify-between mb-4 border border-b-gray-200 border-t-0 border-l-0 border-r-0 pb-4">
         <TouchableOpacity onPress={() => navigation.navigate('Setting')}>
           <Ionicons name="chevron-back" size={32} color="white" />
         </TouchableOpacity>
-        <View className="flex-1 items-center">
-          <Text className="text-white text-3xl font-semibold">
+        <View className="text-center">
+          <Text className="text-white text-2xl font-semibold">
             Term & Conditions
           </Text>
         </View>
+        <View></View>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} className="px-4">

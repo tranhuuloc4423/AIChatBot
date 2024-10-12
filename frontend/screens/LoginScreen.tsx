@@ -33,7 +33,7 @@ const LoginScreen = ({ navigation }: RouterProps) => {
       const res = await axios.post('/auth/login', login)
       dispatch(setToken(res.data?.token))
       dispatch(setUser({ ...login, conversations: [] } as User))
-      navigation.navigate('Suggestions')
+      navigation.navigate('Main')
     } catch (error) {
       console.log(error)
       Alert.alert('Lỗi đăng nhập')
