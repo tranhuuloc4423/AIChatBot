@@ -11,19 +11,19 @@ const Tags = ({ navigation }: RouterProps) => {
         <View className="rounded-full p-1 bg-white">
           <Ionicons
             name="chatbubble-ellipses-outline"
-            size={28}
+            size={24}
             color={'black'}
           />
         </View>
       ),
-      path: 'CreateCons',
+      path: 'Chat',
       active: false
     },
     {
       name: 'History',
       icon: (
         <View className="rounded-full p-1 bg-white">
-          <Ionicons name="time-outline" size={28} color={'black'} />
+          <Ionicons name="time-outline" size={24} color={'black'} />
         </View>
       ),
       path: 'History',
@@ -33,7 +33,7 @@ const Tags = ({ navigation }: RouterProps) => {
       name: 'Setting',
       icon: (
         <View className="rounded-full p-1 bg-white">
-          <Ionicons name="settings-outline" size={28} color={'black'} />
+          <Ionicons name="settings-outline" size={24} color={'black'} />
         </View>
       ),
       path: 'Setting',
@@ -49,12 +49,10 @@ const Tags = ({ navigation }: RouterProps) => {
     setTags(updatedTags)
   }
   return (
-    <ScrollView
-      className="w-full"
-      horizontal={true}
-      showsHorizontalScrollIndicator={false}
+    <View
+      className="w-full bg-black-100 flex mx-auto items-center justify-center"
     >
-      <View className="flex flex-row items-center px-4 py-2">
+      <View className="flex flex-row items-center px-2 pt-10 pb-4">
         {tags.map((tag, index) => (
           <Tag
             key={index}
@@ -68,7 +66,7 @@ const Tags = ({ navigation }: RouterProps) => {
           />
         ))}
       </View>
-    </ScrollView>
+    </View>
   )
 }
 

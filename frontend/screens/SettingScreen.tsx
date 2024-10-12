@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { RouterProps } from '../types/navigation'
 
-const SuggestionsScreen = ({ navigation }: RouterProps) => {
+const SettingScreen = ({ navigation }: RouterProps) => {
   const supportOptions = [
     {
       label: 'About us',
@@ -26,7 +26,7 @@ const SuggestionsScreen = ({ navigation }: RouterProps) => {
   ]
 
   return (
-    <View className="bg-black-100 pt-10 px-8 h-screen w-screen">
+    <View className="bg-black-100 px-8 h-screen w-screen">
       <View className="flex flex-col gap-4">
         <View>
           <Text className="text-3xl text-center font-semibold text-white">
@@ -73,4 +73,4 @@ const SuggestionsScreen = ({ navigation }: RouterProps) => {
   )
 }
 
-export default SuggestionsScreen
+export default SettingScreen

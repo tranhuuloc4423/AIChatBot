@@ -9,12 +9,14 @@ import {
 } from 'react-native'
 import React, { useState, useRef, Ref, useEffect } from 'react'
 import { Ionicons, Feather } from '@expo/vector-icons'
+// import Voice from '@react-native-voice/voice';
 import Input from '../components/Input'
 import MessageBubble from '../components/MessegeBubble'
 import { RouterProps } from '../types/navigation'
 import { useAppSelector } from '../redux/customHooks'
 import axios from '../axiosInstance'
 import { createNewConversation, getConversation } from '../redux/api/app'
+import Button from '../components/Button';
 
 const ChatScreen = ({ navigation, route }: RouterProps) => {
   const token = useAppSelector((state) => state.app.token)
@@ -28,11 +30,12 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
   const [id, setId] = useState()
   const [currentTitle, setCurrentTitle] = useState<string>('')
   const [loading, setLoading] = useState(false)
+  const [isListening, setIslistening] = useState(false)
   const [loadingDots, setLoadingDots] = useState('.')
   const [isEditing, setIsEditing] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
 
-  const getConversationById = async () => {
+  const getConversationById = async (conversationId: any) => {
     try {
       const result = await getConversation(conversationId, token)
       setMessages(result?.messageIds)
@@ -53,20 +56,6 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
       console.log(error)
     }
   }
-  useEffect(() => {
-    if (conversationId) {
-      getConversationById()
-      setCurrentTitle(title)
-    } else {
-      createConversation()
-    }
-  }, [])
-
-  useEffect(() => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToEnd({ animated: true })
-    }
-  }, [messages])
 
   const updateTitle = async () => {
     try {
@@ -79,6 +68,7 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
           }
         }
       )
+      console.log(res.data)
     } catch (error) {
       console.log(error)
     }
@@ -141,15 +131,83 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
     }
   }
 
+  // useEffect(() => {
+  //   if (conversationId && title) {
+  //     getConversationById();
+  //     setCurrentTitle(title);
+  //   }
+  //   if (conversationId == null || title == null) {
+  //     createConversation();
+  //   }
+
+  //   // Đăng ký sự kiện cho Voice
+  //   Voice.onSpeechResults = onSpeechResults;
+  //   return () => {
+  //     Voice.destroy().then(Voice.removeAllListeners);
+  //   };
+  // }, []);
+
+  // const onSpeechResults = (e: any) => {
+  //   // Cập nhật text với kết quả nhận diện
+  //   if (e.value && e.value.length > 0) {
+  //     setText(e.value[0]);
+  //   }
+  // };
+
+  // const startListening = async () => {
+  //   try {
+  //     await Voice.start('en-US'); // hoặc ngôn ngữ khác
+  //     setIslistening(true)
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  // const stopListening = async () => {
+  //   try {
+  //     await Voice.stop();
+  //     setIslistening(false)
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+  // const toggleListening = () => {
+  //   if (isListening) {
+  //     stopListening(); // Dừng nghe nếu đang nghe
+  //   } else {
+  //     startListening(); // Bắt đầu nghe nếu không nghe
+  //   }
+  // };
+
+  useEffect(() => {
+    if (conversationId && title) {
+      getConversationById(conversationId)
+      setId(conversationId)
+      setCurrentTitle(title)
+      console.log(conversationId)
+    }
+    if (conversationId == null || title == null) {
+      createConversation()
+      setCurrentTitle('Untitled')
+    }
+  }, [conversationId])
+
+  useEffect(() => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: true })
+    }
+  }, [messages])
+
   return (
     <KeyboardAvoidingView
       behavior="padding"
       keyboardVerticalOffset={0}
-      className="bg-black-100 flex-1 justify-between pt-10 h-screen w-screen"
+      className="bg-black-100 flex-1 justify-between h-screen w-screen pt-8"
     >
       <View className="flex flex-col gap-4">
         <View className="flex fixed border-b border-gray-200 px-4 pb-2 flex-row justify-between items-center">
-          <Pressable onPress={() => navigation.navigate('Suggestions')}>
+          <Pressable onPress={() => navigation.goBack()}>
             <Ionicons name="close-outline" size={36} color={'white'} />
           </Pressable>
           {isEditing ? (
@@ -203,6 +261,9 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
             className="z-50 w-full"
           />
         </View>
+        {/* <Pressable onPress={toggleListening}>
+          <Feather name='mic' size={24}/>
+        </Pressable> */}
         <TouchableOpacity
           onPress={handleSendMessage}
           className="bg-primary rounded-full w-10 h-10 flex justify-center items-center"

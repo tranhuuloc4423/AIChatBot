@@ -17,13 +17,13 @@ const Tag = ({
   return (
     <View>
       <TouchableOpacity
-        className={`px-4 mr-3 py-2 flex flex-row items-center rounded-lg ${
+        className={`px-2 mr-2 py-2 flex flex-row items-center rounded-lg ${
           active ? 'bg-primary' : 'bg-black-300'
         } ${className}`}
         onPress={onPress}
       >
         {icon}
-        <Text className="text-white text-3xl ml-2">{label}</Text>
+        <Text className="text-white text-2xl ml-2">{label}</Text>
       </TouchableOpacity>
     </View>
   )

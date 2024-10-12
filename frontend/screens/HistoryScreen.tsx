@@ -35,13 +35,13 @@ const HistoryScreen = ({ navigation }: RouterProps) => {
 
   useEffect(() => {
     getHistory()
-  }, [])
+  }, [history])
 
   return (
     <KeyboardAvoidingView
       behavior="padding"
       keyboardVerticalOffset={0}
-      className="bg-black-100 flex-1 justify-between w-screen px-4 pt-10"
+      className="bg-black-100 flex-1 justify-between w-screen px-4"
     >
       <View>
         <Text className="text-3xl text-center font-semibold text-white pb-2">
@@ -53,21 +53,19 @@ const HistoryScreen = ({ navigation }: RouterProps) => {
         showsVerticalScrollIndicator={false}
         horizontal={false}
       >
-        <View className="flex flex-col gap-4 w-full mx-auto">
-          <View className="">
-            {history?.map((item: any) => (
-              <HistoryLable
-                key={item._id}
-                text={item.title}
-                onClick={() =>
-                  navigation.navigate('Chat', {
-                    conversationId: item._id,
-                    title: item?.title
-                  })
-                }
-              />
-            ))}
-          </View>
+        <View className="flex flex-col gap-4 w-full mx-auto py-4">
+          {history?.map((item: any) => (
+            <HistoryLable
+              key={item._id}
+              text={item.title}
+              onClick={() =>
+                navigation.navigate('Chat', {
+                  conversationId: item._id,
+                  title: item?.title
+                })
+              }
+            />
+          ))}
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

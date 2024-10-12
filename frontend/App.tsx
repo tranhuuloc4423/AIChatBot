@@ -7,14 +7,38 @@ import WelcomeScreen from './screens/WelcomScreen'
 import LanguageScreen from './screens/Setting/LanguageScreen'
 import TermScreen from './screens/Setting/TermScreen'
 import AboutScreen from './screens/Setting/AboutScreen'
+import SettingScreen from './screens/SettingScreen'
 
 import ChatScreen from './screens/ChatScreen'
-import CreateConScreen from './screens/CreateConScreen'
 import store from './redux/store'
 import { Provider } from 'react-redux'
-import BottomBars from './screens/BottomBars'
+import HistoryScreen from './screens/HistoryScreen'
+import { Text, View } from 'react-native'
+import { RouterProps } from './types/navigation'
+import Tags from './components/Tags'
 
 const Stack = createNativeStackNavigator()
+const Tag = createNativeStackNavigator()
+
+const TagsScreen = ({ navigation }: RouterProps) => {
+  return (
+    <View className="flex-1">
+      <Tags navigation={navigation} />
+      <View className="flex-1">
+        <View className="flex-1">
+          <Tag.Navigator
+            initialRouteName="Chat"
+            screenOptions={{ headerShown: false }}
+          >
+            <Tag.Screen name="Chat" component={ChatScreen} />
+            <Tag.Screen name="Setting" component={SettingScreen} />
+            <Tag.Screen name="History" component={HistoryScreen} />
+          </Tag.Navigator>
+        </View>
+      </View>
+    </View>
+  )
+}
 
 export default function App() {
   return (
@@ -25,18 +49,14 @@ export default function App() {
           screenOptions={{ headerShown: false }}
         >
           <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Main" component={BottomBars} />
+          <Stack.Screen name="Main" component={TagsScreen} />
           <Stack.Screen name="Chat" component={ChatScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          {/* <Stack.Screen name="Suggestions" component={SuggestionsScreen} />
-          <Stack.Screen name="Setting" component={SettingScreen} />
-          <Stack.Screen name="History" component={HistoryScreen} /> */}
           <Stack.Screen name="Language" component={LanguageScreen} />
           <Stack.Screen name="Term" component={TermScreen} />
           <Stack.Screen name="About" component={AboutScreen} />
-          <Stack.Screen name="CreateCons" component={CreateConScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
