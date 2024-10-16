@@ -1,5 +1,6 @@
 import { NavigationContainer, useNavigation } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+
 import store from './redux/store'
 import { Provider, useDispatch } from 'react-redux'
 import { View } from 'react-native'
@@ -18,33 +19,10 @@ import {
   LanguageScreen,
   TermScreen,
   AboutScreen,
-  SettingScreen,
-  ChatScreen,
-  HistoryScreen
+  Drawer
 } from './screens'
 
 const Stack = createNativeStackNavigator()
-const Tag = createNativeStackNavigator()
-
-const TagsScreen = ({ navigation }: RouterProps) => {
-  return (
-    <View className="flex-1">
-      <Tags navigation={navigation} />
-      <View className="flex-1">
-        <View className="flex-1">
-          <Tag.Navigator
-            initialRouteName="Chat"
-            screenOptions={{ headerShown: false }}
-          >
-            <Tag.Screen name="Chat" component={ChatScreen} />
-            <Tag.Screen name="Setting" component={SettingScreen} />
-            <Tag.Screen name="History" component={HistoryScreen} />
-          </Tag.Navigator>
-        </View>
-      </View>
-    </View>
-  )
-}
 
 const AppNavigator = () => {
   const dispatch = useDispatch()
@@ -78,8 +56,8 @@ const AppNavigator = () => {
       screenOptions={{ headerShown: false, animation: 'fade' }}
     >
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Main" component={TagsScreen} />
-      <Stack.Screen name="Chat" component={ChatScreen} />
+      <Stack.Screen name="Main" component={Drawer} />
+      {/* Correctly used as a Screen */}
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="Welcome" component={WelcomeScreen} />

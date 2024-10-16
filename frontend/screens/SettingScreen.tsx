@@ -36,11 +36,11 @@ const SettingScreen = ({ navigation }: RouterProps) => {
   return (
     <View className="bg-black-100 px-8 h-screen w-screen">
       <View className="flex flex-col gap-4">
-        <View>
+        {/* <View>
           <Text className="text-3xl text-center font-semibold text-white">
             {title}
           </Text>
-        </View>
+        </View> */}
 
         {/* Updated Container for Support Options */}
         <View className="bg-gray-800 rounded-[24px] border-[2px] border-gray-700">

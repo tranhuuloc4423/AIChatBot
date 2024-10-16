@@ -1,5 +1,5 @@
 // screens/ChatScreen.tsx
-import { View, KeyboardAvoidingView } from 'react-native'
+import { View, KeyboardAvoidingView, Alert } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { RouterProps } from '../types/navigation'
 import { useAppSelector } from '../redux/customHooks'
@@ -58,6 +58,7 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
           }
         }
       )
+      Alert.alert('Cập nhật tiêu đề thành công!')
     } catch (error) {
       console.log(error)
     }
@@ -134,7 +135,7 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
     <KeyboardAvoidingView
       behavior="padding"
       keyboardVerticalOffset={0}
-      className="bg-black-100 flex-1 justify-between h-screen w-screen pt-8"
+      className="bg-black-100 flex-1 justify-between h-screen w-screen"
     >
       <ChatHeader
         currentTitle={currentTitle}
@@ -142,7 +143,7 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
         isEditing={isEditing}
         setIsEditing={setIsEditing}
         handleSaveTitle={handleSaveTitle}
-        goBack={() => navigation.goBack()}
+        goBack={() => navigation.navigate('Home')}
       />
       <MessageList messages={messages} loading={loading} />
       <MessageInput

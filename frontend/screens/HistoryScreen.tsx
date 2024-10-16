@@ -59,11 +59,11 @@ const HistoryScreen = ({ navigation }: RouterProps) => {
       keyboardVerticalOffset={0}
       className="bg-black-100 flex-1 justify-between w-full px-4"
     >
-      <View>
+      {/* <View>
         <Text className="text-3xl text-center font-semibold text-white pb-2">
           {desc}
         </Text>
-      </View>
+      </View> */}
       <ScrollView
         className="h-screen w-full pb-10"
         showsVerticalScrollIndicator={false}

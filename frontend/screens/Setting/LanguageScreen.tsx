@@ -40,7 +40,7 @@ const LanguageScreen = ({ navigation }: RouterProps) => {
   }
 
   return (
-    <View className="bg-black-100 h-full w-full px-4 pb-4 pt-8">
+    <View className="bg-black-100 h-full w-full px-8 pb-4 pt-8">
       <View className="flex flex-col gap-4">
         <View className="flex-row items-center justify-between">
           <TouchableOpacity onPress={() => navigation.navigate('Setting')}>

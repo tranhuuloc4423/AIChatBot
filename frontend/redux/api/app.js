@@ -49,11 +49,12 @@ export const loginUser = async (data, dispatch, navigation) => {
 }
 
 // Action logout và xóa token khỏi AsyncStorage
-export const logoutUser = async (dispatch) => {
+export const logoutUser = async (dispatch, navigation) => {
   await AsyncStorage.removeItem('token')
   await AsyncStorage.removeItem('user')
   await AsyncStorage.removeItem('language')
   dispatch(logout())
+  navigation.navigate('Login')
 }
 
 export const setLanguageApp = async (lang, dispatch) => {

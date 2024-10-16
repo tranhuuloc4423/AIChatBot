@@ -50,6 +50,7 @@ export interface LanguageSection {
     }>
   }
   buttonScreen: {
+    home: string
     chat: string
     history: string
     setting: string
@@ -64,6 +65,13 @@ export interface LanguageSection {
       about: string
       term: string
       languge: string
+    }
+  }
+  other: {
+    logout: {
+      title: string
+      desc: string
+      cancel: string
     }
   }
 }
@@ -147,6 +155,7 @@ const langs: Langs = {
       ]
     },
     buttonScreen: {
+      home: 'Trang chủ',
       chat: 'Trò chuyện',
       history: 'Lịch sử',
       setting: 'Cài đặt'
@@ -161,6 +170,13 @@ const langs: Langs = {
         about: 'Về chúng tôi',
         term: 'Điều khoản',
         languge: 'Ngôn ngữ'
+      }
+    },
+    other: {
+      logout: {
+        title: 'Đăng xuất',
+        desc: 'Bạn có muốn đăng xuất tài khoản ?',
+        cancel: 'Huỷ'
       }
     }
   },
@@ -237,6 +253,7 @@ const langs: Langs = {
       ]
     },
     buttonScreen: {
+      home: 'Home',
       chat: 'Chat',
       history: 'History',
       setting: 'Settings'
@@ -251,6 +268,13 @@ const langs: Langs = {
         about: 'About us',
         term: 'Term of conditions',
         languge: 'Languge'
+      }
+    },
+    other: {
+      logout: {
+        title: 'Logout',
+        desc: 'Are you sure you want to logout ?',
+        cancel: 'Cancel'
       }
     }
   }
