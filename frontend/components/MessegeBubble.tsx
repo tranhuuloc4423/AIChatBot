@@ -1,14 +1,23 @@
-import { View, Text, Image, Alert } from 'react-native'
+import { View, Text, Image, Alert, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import * as Clipboard from 'expo-clipboard'
 import { Feather } from '@expo/vector-icons'
+import langs, { Langs } from '../utils/langs'
+import { useAppSelector } from '../redux/customHooks'
 
 interface MessageBubbleProps {
   role: string
   content: string
+  loading: boolean
 }
 
-const MessageBubble: React.FC<MessageBubbleProps> = ({ role, content }) => {
+const MessageBubble: React.FC<MessageBubbleProps> = ({
+  role,
+  content,
+  loading
+}) => {
+  const { language } = useAppSelector((state) => state.app)
+  const { button_copy } = langs[language as keyof Langs]?.chat
   const copyToClipboard = async () => {
     await Clipboard.setStringAsync(content)
     Alert.alert('Copied to clipboard!', content)
@@ -42,18 +51,20 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ role, content }) => {
             {content}
           </Text>
         </View>
-        {role === 'assistant' && (
-          <View className="items-end ">
-            <View className="bg-black-200 p-2 rounded-lg flex flex-row items-center border border-gray-200">
+        {role === 'assistant' && !loading && (
+          <View className="items-end">
+            <Pressable
+              onPress={copyToClipboard}
+              className="bg-black-200 p-2 rounded-lg flex flex-row items-center border border-gray-200"
+            >
               <Feather
                 name="copy"
-                size={24}
+                size={20}
                 color="white"
-                onPress={copyToClipboard}
                 className="bg-black-200"
               />
-              <Text className="text-white font-medium ml-2">Copy text</Text>
-            </View>
+              <Text className="text-white font-medium ml-2">{button_copy}</Text>
+            </Pressable>
           </View>
         )}
       </View>

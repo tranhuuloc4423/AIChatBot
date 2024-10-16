@@ -17,4 +17,5 @@ export interface User {
 export interface AppState {
   user: User
   token: string | null
+  language: string
 }

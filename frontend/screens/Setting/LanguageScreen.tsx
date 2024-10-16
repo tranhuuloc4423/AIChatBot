@@ -2,29 +2,41 @@ import React, { useState } from 'react'
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { RouterProps } from '../../types/navigation'
+import { setLanguageApp } from '../../redux/api/app'
+import { useDispatch } from 'react-redux'
+import { useAppSelector } from '../../redux/customHooks'
+import langs, { Langs } from '../../utils/langs'
 
 const LanguageScreen = ({ navigation }: RouterProps) => {
-  const [selectedLanguage, setSelectedLanguage] = useState<string>('English')
+  const { language } = useAppSelector((state) => state.app)
+  const dispatch = useDispatch()
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(language)
+
+  const {
+    title,
+    langugeText: { vietnamese, english }
+  } = langs[language as keyof Langs]?.languge
 
   const languages = [
     {
-      label: 'Tiếng Việt',
+      label: vietnamese,
       flag: {
         uri: 'https://emojigraph.org/media/joypixels/flag-vietnam_1f1fb-1f1f3.png'
       },
-      value: 'Vietnamese'
+      value: 'vietnamese'
     },
     {
-      label: 'English',
+      label: english,
       flag: {
         uri: 'https://emojigraph.org/media/joypixels/flag-united-kingdom_1f1ec-1f1e7.png'
       },
-      value: 'English'
+      value: 'english'
     }
   ]
 
   const handleLanguageSelection = (value: string) => {
     setSelectedLanguage(value)
+    setLanguageApp(value, dispatch)
   }
 
   return (
@@ -35,7 +47,7 @@ const LanguageScreen = ({ navigation }: RouterProps) => {
             <Ionicons name="chevron-back" size={32} color="white" />
           </TouchableOpacity>
           <View className="flex-1 flex items-center justify-center">
-            <Text className="text-white text-2xl font-semibold">Language</Text>
+            <Text className="text-white text-2xl font-semibold">{title}</Text>
           </View>
           <View className="w-8"></View>
         </View>

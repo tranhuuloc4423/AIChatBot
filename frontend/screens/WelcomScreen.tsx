@@ -2,8 +2,11 @@ import { View, Text, Image, TouchableOpacity, Pressable } from 'react-native'
 import React from 'react'
 import { RouterProps } from '../types/navigation'
 import Button from '../components/Button'
-
+import langs, { Langs } from '../utils/langs'
+import { useAppSelector } from '../redux/customHooks'
 const WelcomeScreen = ({ navigation }: RouterProps) => {
+  const { language } = useAppSelector((state) => state.app)
+  const { title, desc, button, terms } = langs[language as keyof Langs]?.welcome
   return (
     <View className=" bg-black-100 pt-20 px-8 h-screen w-full">
       <View className="flex flex-col gap-8">
@@ -15,24 +18,20 @@ const WelcomeScreen = ({ navigation }: RouterProps) => {
         </View>
         <View className="gap-2 flex flex-col items-center">
           <Text className="text-2xl font-semibold text-white text-center">
-            Welcome to Ai chat bot
+            {title}
           </Text>
-          <Text className="text-xl text-white text-center">
-            Lorem ispum is simply dummy text of the printing and
-          </Text>
+          <Text className="text-xl text-white text-center">{desc}</Text>
         </View>
         <View>
           <Button
             className=""
             onPress={() => navigation.navigate('Login')}
-            label="Get started"
+            label={button}
           />
         </View>
         <View className="flex flex-row justify-center items-center gap-2">
           <Pressable onPress={() => navigation.navigate('Term')}>
-            <Text className="text-xl text-white font-medium">
-              Terms & Conditions
-            </Text>
+            <Text className="text-xl text-white font-medium">{terms}</Text>
           </Pressable>
         </View>
       </View>

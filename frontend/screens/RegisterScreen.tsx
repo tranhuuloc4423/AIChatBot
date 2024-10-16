@@ -15,6 +15,8 @@ import { RouterProps } from '../types/navigation'
 import Inputfield from '../components/Inputfield'
 import axios from '../axiosInstance'
 import { useSelector } from 'react-redux'
+import { useAppSelector } from '../redux/customHooks'
+import langs, { Langs } from '../utils/langs'
 
 const RegisterScreen = ({ navigation }: RouterProps) => {
   const [email, setEmail] = useState<string>('')
@@ -22,6 +24,16 @@ const RegisterScreen = ({ navigation }: RouterProps) => {
   const [passwordConfirmed, setPasswordConfirmed] = useState<string>('')
   const [open, setOpen] = useState<boolean>(false)
   const [openConfirm, setOpenConfirm] = useState<boolean>(false)
+  const { language } = useAppSelector((state) => state.app)
+  const {
+    title,
+    input_email,
+    input_password,
+    button_register,
+    button_login,
+    input_passwordComfirmed,
+    terms
+  } = langs[language as keyof Langs]?.register
 
   const handleRegister = async () => {
     try {
@@ -51,14 +63,14 @@ const RegisterScreen = ({ navigation }: RouterProps) => {
           />
         </View>
         <Text className="w-full text-center text-white text-2xl font-bold">
-          Welcome to Ai chat bot
+          {title}
         </Text>
         <View>
           <Inputfield
             inputProps={{
               keyboardType: 'email-address',
               autoCapitalize: 'none',
-              placeholder: 'Email'
+              placeholder: input_email
             }}
             onChange={(e) => setEmail(e)}
             value={email}
@@ -69,7 +81,7 @@ const RegisterScreen = ({ navigation }: RouterProps) => {
           <Inputfield
             inputProps={{
               secureTextEntry: !open,
-              placeholder: 'Password'
+              placeholder: input_password
             }}
             onChange={(e) => setPassword(e)}
             value={password}
@@ -93,7 +105,7 @@ const RegisterScreen = ({ navigation }: RouterProps) => {
           <Inputfield
             inputProps={{
               secureTextEntry: !openConfirm,
-              placeholder: 'Password Confirmed'
+              placeholder: input_passwordComfirmed
             }}
             onChange={(e) => setPasswordConfirmed(e)}
             value={passwordConfirmed}
@@ -115,17 +127,17 @@ const RegisterScreen = ({ navigation }: RouterProps) => {
         </View>
         <View>
           <Button
-            label="Register"
+            label={button_register}
             onPress={handleRegister}
             className="w-full"
           />
         </View>
         <View className="flex flex-row justify-center items-center gap-2">
-          <Text className="text-xl text-white font-medium">
-            Already have an account?
-          </Text>
+          <Text className="text-xl text-white font-medium">{terms}</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text className="text-xl text-primary font-medium">Login</Text>
+            <Text className="text-xl text-primary font-medium">
+              {button_login}
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

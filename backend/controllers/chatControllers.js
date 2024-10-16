@@ -158,3 +158,20 @@ export const updateTitle = async (req, res) => {
     res.status(500).json({ msg: 'Internal server error' })
   }
 }
+
+export const removeConversation = async (req, res) => {
+  const { conversationId } = req.params
+
+  try {
+    const conversation = await Conversation.findByIdAndDelete(conversationId)
+
+    if (!conversation) {
+      return res.status(404).json({ msg: 'Conversation not found' })
+    }
+
+    res.json({ success: true, msg: 'remove succesfull' })
+  } catch (error) {
+    console.error('Error while remove conversation :', error)
+    res.status(500).json({ msg: 'Internal server error' })
+  }
+}

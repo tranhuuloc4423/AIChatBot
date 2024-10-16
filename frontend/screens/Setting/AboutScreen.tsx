@@ -2,6 +2,8 @@ import React from 'react'
 import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { RouterProps } from '../../types/navigation'
+import { useAppSelector } from '../../redux/customHooks'
+import langs, { Langs } from '../../utils/langs'
 
 const teamMembers = [
   {
@@ -31,6 +33,8 @@ const teamMembers = [
 ]
 
 const TermScreen = ({ navigation }: RouterProps) => {
+  const { language } = useAppSelector((state) => state.app)
+  const { title } = langs[language as keyof Langs]?.about
   return (
     <View className="bg-black-100 h-full w-full px-4 pb-4 pt-8">
       <View className="flex flex-col gap-4">
@@ -39,7 +43,7 @@ const TermScreen = ({ navigation }: RouterProps) => {
             <Ionicons name="chevron-back" size={32} color="white" />
           </TouchableOpacity>
           <View className="flex-1 items-center">
-            <Text className="text-white text-2xl font-semibold">About Us</Text>
+            <Text className="text-white text-2xl font-semibold">{title}</Text>
           </View>
           <View className="w-8"></View>
         </View>

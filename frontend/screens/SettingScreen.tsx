@@ -1,36 +1,44 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { RouterProps } from '../types/navigation'
+import { useAppSelector } from '../redux/customHooks'
+import langs, { Langs } from '../utils/langs'
 
 const SettingScreen = ({ navigation }: RouterProps) => {
+  const { language } = useAppSelector((state) => state.app)
+  const {
+    title,
+    buttonText: { about, term, languge }
+  } = langs[language as keyof Langs]?.setting
   const supportOptions = [
     {
-      label: 'About us',
+      label: about,
       path: 'About',
       icon: 'information-circle-outline',
       bgColor: 'bg-purple-500'
     },
     {
-      label: 'Terms of Conditions',
+      label: term,
       path: 'Term',
       icon: 'document-text-outline',
       bgColor: 'bg-green-500'
     },
     {
-      label: 'Language',
+      label: languge,
       path: 'Language',
       icon: 'earth-outline',
       bgColor: 'bg-blue-500'
     }
   ]
 
+  useEffect(() => {}, [language])
   return (
     <View className="bg-black-100 px-8 h-screen w-screen">
       <View className="flex flex-col gap-4">
         <View>
           <Text className="text-3xl text-center font-semibold text-white">
-            Support
+            {title}
           </Text>
         </View>
 

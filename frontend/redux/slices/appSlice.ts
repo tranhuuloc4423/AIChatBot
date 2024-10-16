@@ -7,7 +7,8 @@ const initialState: AppState = {
     password: null,
     conversations: []
   },
-  token: null
+  token: null,
+  language: 'english'
 }
 
 const appSlice = createSlice({
@@ -22,10 +23,29 @@ const appSlice = createSlice({
     },
     setNewConversation: (state, action: PayloadAction<string>) => {
       state.user.conversations.push(action.payload)
+    },
+    loginSuccess: (state, action) => {
+      // console.log(action.payload)
+      state.token = action.payload.token
+      state.user = action.payload.user
+    },
+    logout: (state) => {
+      state.token = null
+      state.user = { conversations: [], email: null, password: null }
+    },
+    setLanguage: (state, action) => {
+      state.language = action.payload
     }
   }
 })
 
-export const { setUser, setToken, setNewConversation } = appSlice.actions
+export const {
+  setUser,
+  setToken,
+  setNewConversation,
+  loginSuccess,
+  logout,
+  setLanguage
+} = appSlice.actions
 
 export default appSlice.reducer

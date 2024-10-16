@@ -4,18 +4,21 @@ import {
   Platform,
   Text,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import HistoryLable from '../components/HistoryLable'
 import { RouterProps } from '../types/navigation'
 import { useAppSelector } from '../redux/customHooks'
 import axios from '../axiosInstance'
+import langs, { Langs } from '../utils/langs'
 
 const HistoryScreen = ({ navigation }: RouterProps) => {
-  const user = useAppSelector((state) => state.app.user)
-  const token = useAppSelector((state) => state.app.token)
+  const { language, token, user } = useAppSelector((state) => state.app)
   const [history, setHistory] = useState([])
+
+  const { title, desc } = langs[language as keyof Langs]?.history
 
   const getHistory = async () => {
     try {
@@ -33,6 +36,19 @@ const HistoryScreen = ({ navigation }: RouterProps) => {
     }
   }
 
+  const handleRemove = async (id: string) => {
+    try {
+      const res = await axios.delete(`/chat/remove/${id}`, {
+        headers: {
+          Authorization: token
+        }
+      })
+      Alert.alert('Xoá cuộc trò chuyện thành công !')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     getHistory()
   }, [history])
@@ -41,11 +57,11 @@ const HistoryScreen = ({ navigation }: RouterProps) => {
     <KeyboardAvoidingView
       behavior="padding"
       keyboardVerticalOffset={0}
-      className="bg-black-100 flex-1 justify-between w-screen px-4"
+      className="bg-black-100 flex-1 justify-between w-full px-4"
     >
       <View>
         <Text className="text-3xl text-center font-semibold text-white pb-2">
-          Topics
+          {desc}
         </Text>
       </View>
       <ScrollView
@@ -53,7 +69,7 @@ const HistoryScreen = ({ navigation }: RouterProps) => {
         showsVerticalScrollIndicator={false}
         horizontal={false}
       >
-        <View className="flex flex-col gap-4 w-full mx-auto py-4">
+        <View className="flex flex-col items-center mx-auto w-full">
           {history?.map((item: any) => (
             <HistoryLable
               key={item._id}
@@ -64,6 +80,7 @@ const HistoryScreen = ({ navigation }: RouterProps) => {
                   title: item?.title
                 })
               }
+              onRemove={() => handleRemove(item._id)}
             />
           ))}
         </View>

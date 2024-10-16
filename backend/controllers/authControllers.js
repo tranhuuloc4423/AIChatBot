@@ -20,7 +20,7 @@ export const registerUser = async (req, res) => {
 
     await newUser.save()
     const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: '2h'
+      expiresIn: '7d'
     })
 
     res.status(201).json({ msg: 'Đăng ký thành công', token })

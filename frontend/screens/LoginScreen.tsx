@@ -13,31 +13,30 @@ import Button from '../components/Button'
 import { Octicons } from '@expo/vector-icons'
 import Inputfield from '../components/Inputfield'
 import { RouterProps } from '../types/navigation'
-import axios from '../axiosInstance'
-import { setToken, setUser } from '../redux/slices/appSlice'
-import { User } from '../types/app'
-import { useAppDispatch } from '../redux/customHooks'
-
+import { useAppDispatch, useAppSelector } from '../redux/customHooks'
+import { loginUser } from '../redux/api/app'
+import langs, { Langs } from '../utils/langs'
 const LoginScreen = ({ navigation }: RouterProps) => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [open, setOpen] = useState<boolean>(false)
   const dispatch = useAppDispatch()
+  const { language } = useAppSelector((state) => state.app)
+  const {
+    title,
+    input_email,
+    input_password,
+    button_login,
+    terms,
+    button_register
+  } = langs[language as keyof Langs]?.login
 
   const handleLogin = async () => {
-    try {
-      const login = {
-        email,
-        password
-      }
-      const res = await axios.post('/auth/login', login)
-      dispatch(setToken(res.data?.token))
-      dispatch(setUser({ ...login, conversations: [] } as User))
-      navigation.navigate('Main')
-    } catch (error) {
-      console.log(error)
-      Alert.alert('Lỗi đăng nhập')
+    const data = {
+      email,
+      password
     }
+    loginUser(data, dispatch, navigation)
   }
 
   return (
@@ -60,7 +59,7 @@ const LoginScreen = ({ navigation }: RouterProps) => {
         </View>
         <View className="py-4">
           <Text className="w-full text-center text-white text-2xl font-bold">
-            Welcome to Ai chat bot
+            {title}
           </Text>
         </View>
         <View>
@@ -68,7 +67,7 @@ const LoginScreen = ({ navigation }: RouterProps) => {
             inputProps={{
               keyboardType: 'email-address',
               autoCapitalize: 'none',
-              placeholder: 'Email'
+              placeholder: input_email
             }}
             onChange={(e) => setEmail(e)}
             value={email}
@@ -79,7 +78,7 @@ const LoginScreen = ({ navigation }: RouterProps) => {
           <Inputfield
             inputProps={{
               secureTextEntry: !open,
-              placeholder: 'Password'
+              placeholder: input_password
             }}
             onChange={(e) => setPassword(e)}
             value={password}
@@ -100,14 +99,18 @@ const LoginScreen = ({ navigation }: RouterProps) => {
           />
         </View>
         <View>
-          <Button label="Login" onPress={handleLogin} className="w-full" />
+          <Button
+            label={button_login}
+            onPress={handleLogin}
+            className="w-full"
+          />
         </View>
         <View className="flex flex-row justify-center items-center gap-2">
-          <Text className="text-xl text-white font-medium">
-            Already have an account?
-          </Text>
+          <Text className="text-xl text-white font-medium">{terms}</Text>
           <Pressable onPress={() => navigation.navigate('Register')}>
-            <Text className="text-xl text-primary font-medium">register</Text>
+            <Text className="text-xl text-primary font-medium">
+              {button_register}
+            </Text>
           </Pressable>
         </View>
       </ScrollView>
