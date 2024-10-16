@@ -1,6 +1,7 @@
-// screens/ChatScreen.tsx
-import { View, KeyboardAvoidingView, Alert } from 'react-native'
 import React, { useState, useEffect } from 'react'
+import { View, KeyboardAvoidingView, Alert, Button } from 'react-native'
+import { Audio } from 'expo-av'
+import * as Speech from 'expo-speech'
 import { RouterProps } from '../types/navigation'
 import { useAppSelector } from '../redux/customHooks'
 import { createNewConversation, getConversation } from '../redux/api/app'
@@ -24,6 +25,8 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
   const [currentTitle, setCurrentTitle] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
+  const [isRecording, setIsRecording] = useState(false)
+  const [recording, setRecording] = useState<Audio.Recording | null>(null)
 
   const getConversationById = async (conversationId: any) => {
     try {
@@ -36,9 +39,7 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
 
   const createConversation = async () => {
     try {
-      const data = {
-        email: user.email
-      }
+      const data = { email: user.email }
       const res = await createNewConversation(data, token)
       setId(res?.conversationId)
       setCurrentTitle(res?.title)
@@ -52,11 +53,7 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
       await axios.put(
         `/chat/title/${id}`,
         { title: currentTitle },
-        {
-          headers: {
-            Authorization: token
-          }
-        }
+        { headers: { Authorization: token } }
       )
       Alert.alert('Cập nhật tiêu đề thành công!')
     } catch (error) {
@@ -75,10 +72,7 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
     setMessages((prevMessages) => [...prevMessages, userMessage])
     setText('')
 
-    const assistantLoadingMessage = {
-      content: 'is typing',
-      role: 'assistant'
-    }
+    const assistantLoadingMessage = { content: 'is typing', role: 'assistant' }
     setMessages((prevMessages) => [...prevMessages, assistantLoadingMessage])
     setLoading(true)
 
@@ -86,11 +80,7 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
       const res = await axios.post(
         '/chat/send-message',
         { conversationId: id, message: text },
-        {
-          headers: {
-            Authorization: token
-          }
-        }
+        { headers: { Authorization: token } }
       )
 
       const assistantMessage = {
@@ -116,6 +106,59 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
       )
     } finally {
       setLoading(false)
+    }
+  }
+
+  const startRecording = async () => {
+    try {
+      console.log('Requesting permissions..')
+      await Audio.requestPermissionsAsync()
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true
+      })
+      console.log('Starting recording..')
+      const { recording } = await Audio.Recording.createAsync(
+        Audio.RecordingOptionsPresets.HIGH
+      )
+      setRecording(recording)
+      setIsRecording(true)
+      console.log('Recording started')
+    } catch (err) {
+      console.error('Failed to start recording', err)
+    }
+  }
+
+  const stopRecording = async () => {
+    console.log('Stopping recording..')
+    setRecording(null)
+    await recording?.stopAndUnloadAsync()
+    const uri = recording?.getURI()
+    console.log('Recording stopped and stored at', uri)
+    setIsRecording(false)
+    transcribeAudio(uri)
+  }
+
+  const transcribeAudio = async (uri: string | undefined) => {
+    if (!uri) return
+    try {
+      const formData = new FormData()
+      formData.append('file', {
+        uri,
+        name: 'recording.wav',
+        type: 'audio/wav'
+      })
+
+      const res = await axios.post('/chat/voice-to-text', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: token
+        }
+      })
+
+      setText(res.data.transcription)
+    } catch (error) {
+      console.log('Transcription error', error)
     }
   }
 
@@ -150,6 +193,10 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
         text={text}
         setText={setText}
         handleSendMessage={handleSendMessage}
+      />
+      <Button
+        title={isRecording ? 'Stop Recording' : 'Start Recording'}
+        onPress={isRecording ? stopRecording : startRecording}
       />
     </KeyboardAvoidingView>
   )
