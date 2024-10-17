@@ -1,7 +1,10 @@
 import { Conversation } from '../models/Conversation.js'
 import { User } from '../models/User.js'
 import { Message } from '../models/Message.js'
-import { cohereApiCall } from '../index.js'
+import {
+  pollinationsImageApiCall,
+  pollinationsTextApiCall
+} from '../utils/api.js'
 
 export const newConversation = async (req, res) => {
   const { email, title } = req.body
@@ -35,26 +38,31 @@ export const newConversation = async (req, res) => {
 }
 
 export const handleChat = async (req, res) => {
-  const { conversationId, message } = req.body
+  const { conversationId, message, type } = req.body
 
   try {
-    // Gọi API của Cohere với các tin nhắn hiện tại
-    const result = await cohereApiCall(message)
+    let result
 
-    // console.log('Cohere API response:', result.message.content[0].text)
-    const text = result.message.content[0].text
-    if (text) {
-      // Tạo các tin nhắn của user trong cơ sở dữ liệu
+    // kiểm trả type là text hay image
+    if (type === 'image') {
+      result = await pollinationsImageApiCall(message)
+    } else {
+      result = await pollinationsTextApiCall(message)
+    }
+
+    // thêm vào conversation
+    if (result) {
       const userMessage = await Message.create({
         role: 'user',
         content: message,
+        type: 'text',
         conversation: conversationId
       })
 
-      // Tạo tin nhắn phản hồi từ Assistant
       const assistantMessage = await Message.create({
         role: 'assistant',
-        content: text,
+        content: result,
+        type: type,
         conversation: conversationId
       })
 
@@ -85,7 +93,7 @@ export const handleChat = async (req, res) => {
     } else {
       return res
         .status(500)
-        .json({ success: false, msg: 'Cohere API call failed' })
+        .json({ success: false, msg: 'Pollinations API call failed' })
     }
   } catch (error) {
     console.error(error)
@@ -107,7 +115,7 @@ export const getAllConversations = async (req, res) => {
       .sort({ createdAt: -1 })
       .populate({
         path: 'messageIds',
-        select: 'role content' // Chỉ lấy trường cần thiết
+        select: 'role content type' // Chỉ lấy trường cần thiết
       })
 
     res.json(conversations)
@@ -123,7 +131,7 @@ export const getConversationById = async (req, res) => {
   try {
     const conversation = await Conversation.findById(conversationId).populate({
       path: 'messageIds',
-      select: 'role content' // Chỉ lấy trường cần thiết
+      select: 'role content type' // Chỉ lấy trường cần thiết
     })
 
     if (!conversation) {

@@ -1,11 +1,11 @@
 import express from 'express'
 import {
-  handleChat,
   newConversation,
   getAllConversations,
   getConversationById,
   updateTitle,
-  removeConversation
+  removeConversation,
+  handleChat
 } from '../controllers/chatControllers.js'
 
 const router = express.Router()

@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native'
 import MessageBubble from './MessegeBubble'
 
 interface MessageListProps {
-  messages: Array<{ content: string; role: string }>
+  messages: Array<{ content: string; role: string; type: string }>
   loading: boolean
 }
 
@@ -23,14 +23,17 @@ const MessageList: React.FC<MessageListProps> = ({ messages, loading }) => {
       onContentSizeChange={() =>
         scrollViewRef.current?.scrollToEnd({ animated: true })
       }
-      className="h-screen w-screen mb-2"
+      className="h-full w-full mb-2"
       showsVerticalScrollIndicator={true}
     >
       {messages?.map((msg, index) => (
         <MessageBubble
           key={index}
-          content={msg.content}
-          role={msg.role}
+          message={{
+            content: msg.content,
+            role: msg.role,
+            type: msg.type
+          }}
           loading={loading}
         />
       ))}

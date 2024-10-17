@@ -25,7 +25,7 @@ const Input = ({
       className={`flex bg-black-200 border w-full border-gray-600 flex-row items-center justify-between p-4 rounded-lg ${className}`}
     >
       <TextInput
-        className="flex-1 text-white w-full"
+        className="flex-1 text-white w-full text-xl"
         onChangeText={onChange}
         value={value}
         {...inputProps}

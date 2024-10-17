@@ -8,7 +8,7 @@ const WelcomeScreen = ({ navigation }: RouterProps) => {
   const { language } = useAppSelector((state) => state.app)
   const { title, desc, button, terms } = langs[language as keyof Langs]?.welcome
   return (
-    <View className=" bg-black-100 pt-20 px-8 h-screen w-full">
+    <View className=" bg-black-100 pt-20 px-8 h-full w-full">
       <View className="flex flex-col gap-8">
         <View className="flex justify-center items-center">
           <Image

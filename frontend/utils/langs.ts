@@ -58,6 +58,7 @@ export interface LanguageSection {
   history: {
     title: string
     desc: string
+    empty: string
   }
   setting: {
     title: string
@@ -162,7 +163,8 @@ const langs: Langs = {
     },
     history: {
       title: 'Lịch sử',
-      desc: 'Các chủ đề'
+      desc: 'Các chủ đề',
+      empty: 'Chưa có lịch sử trò chuyện nào'
     },
     setting: {
       title: 'Cài đặt',
@@ -200,7 +202,7 @@ const langs: Langs = {
       input_email: 'Email',
       input_password: 'Password',
       input_passwordComfirmed: 'Password Comfirmed',
-      button_register: 'register',
+      button_register: 'Register',
       terms: 'Already have an account?',
       button_login: 'Login'
     },
@@ -260,7 +262,8 @@ const langs: Langs = {
     },
     history: {
       title: 'History',
-      desc: 'Topics'
+      desc: 'Topics',
+      empty: 'No history chat'
     },
     setting: {
       title: 'Settings',

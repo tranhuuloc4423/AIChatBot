@@ -16,10 +16,10 @@ const Inputfield = ({
 }) => {
   return (
     <View
-      className={`flex bg-black-200 border border-gray-600 justify-between items-center flex-row p-4 pr-10 rounded-lg ${className}`}
+      className={`flex bg-black-200 border border-gray-200 justify-between items-center flex-row pr-12 rounded-lg ${className}`}
     >
       <TextInput
-        className="w-full text-white text-base font-medium"
+        className="w-full text-white text-xl font-medium py-4 px-6"
         onChangeText={onChange}
         value={value}
         {...inputProps}

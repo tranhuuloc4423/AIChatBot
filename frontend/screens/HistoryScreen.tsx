@@ -1,11 +1,9 @@
 import {
   View,
   KeyboardAvoidingView,
-  Platform,
-  Text,
-  TouchableOpacity,
   ScrollView,
-  Alert
+  Alert,
+  Text
 } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import HistoryLable from '../components/HistoryLable'
@@ -18,11 +16,11 @@ const HistoryScreen = ({ navigation }: RouterProps) => {
   const { language, token, user } = useAppSelector((state) => state.app)
   const [history, setHistory] = useState([])
 
-  const { title, desc } = langs[language as keyof Langs]?.history
+  const { empty } = langs[language as keyof Langs]?.history
 
   const getHistory = async () => {
     try {
-      const res = await axios.get('/chat/history', {
+      const res = await axios.get(`/chat/history/`, {
         headers: {
           Authorization: token
         },
@@ -59,32 +57,33 @@ const HistoryScreen = ({ navigation }: RouterProps) => {
       keyboardVerticalOffset={0}
       className="bg-black-100 flex-1 justify-between w-full px-4"
     >
-      {/* <View>
-        <Text className="text-3xl text-center font-semibold text-white pb-2">
-          {desc}
-        </Text>
-      </View> */}
-      <ScrollView
-        className="h-screen w-full pb-10"
-        showsVerticalScrollIndicator={false}
-        horizontal={false}
-      >
-        <View className="flex flex-col items-center mx-auto w-full">
-          {history?.map((item: any) => (
-            <HistoryLable
-              key={item._id}
-              text={item.title}
-              onClick={() =>
-                navigation.navigate('Chat', {
-                  conversationId: item._id,
-                  title: item?.title
-                })
-              }
-              onRemove={() => handleRemove(item._id)}
-            />
-          ))}
+      {history.length === 0 ? (
+        <View className="mx-auto">
+          <Text className="text-white font-bold text-2xl mt-4">{empty}</Text>
         </View>
-      </ScrollView>
+      ) : (
+        <ScrollView
+          className="h-screen w-full pb-10"
+          showsVerticalScrollIndicator={false}
+          horizontal={false}
+        >
+          <View className="flex flex-col items-center mx-auto w-full">
+            {history?.map((item: any) => (
+              <HistoryLable
+                key={item._id}
+                text={item.title}
+                onClick={() =>
+                  navigation.navigate('Chat', {
+                    conversationId: item._id,
+                    title: item?.title
+                  })
+                }
+                onRemove={() => handleRemove(item._id)}
+              />
+            ))}
+          </View>
+        </ScrollView>
+      )}
     </KeyboardAvoidingView>
   )
 }

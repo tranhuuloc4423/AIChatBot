@@ -40,81 +40,83 @@ const LoginScreen = ({ navigation }: RouterProps) => {
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={'padding'}
-      keyboardVerticalOffset={0}
-      className={`bg-black-100 flex-1  w-screen h-screen px-8 pt-10`}
-    >
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        bounces={false}
-        showsVerticalScrollIndicator={false}
-        className="flex-1 flex flex-col gap-4"
+    <View className="flex-1 w-full h-full bg-black-100">
+      <KeyboardAvoidingView
+        behavior={'padding'}
+        keyboardVerticalOffset={30}
+        className={`flex-1 bg-transparent w-full h-full px-8 pt-10`}
       >
-        <View className="flex justify-center items-center w-full">
-          <Image
-            source={require('../assets/bg.png')}
-            className="w-full h-[250px] bg-cover bg-center"
-          />
-        </View>
-        <View className="py-4">
-          <Text className="w-full text-center text-white text-2xl font-bold">
-            {title}
-          </Text>
-        </View>
-        <View>
-          <Inputfield
-            inputProps={{
-              keyboardType: 'email-address',
-              autoCapitalize: 'none',
-              placeholder: input_email
-            }}
-            onChange={(e) => setEmail(e)}
-            value={email}
-            className="w-full"
-          />
-        </View>
-        <View>
-          <Inputfield
-            inputProps={{
-              secureTextEntry: !open,
-              placeholder: input_password
-            }}
-            onChange={(e) => setPassword(e)}
-            value={password}
-            className="w-full"
-            iconRight={
-              <View>
-                {open ? (
-                  <Pressable onPress={() => setOpen(false)}>
-                    <Octicons name="eye" size={24} color={'white'} />
-                  </Pressable>
-                ) : (
-                  <Pressable onPress={() => setOpen(true)}>
-                    <Octicons name="eye-closed" size={24} color={'white'} />
-                  </Pressable>
-                )}
-              </View>
-            }
-          />
-        </View>
-        <View>
-          <Button
-            label={button_login}
-            onPress={handleLogin}
-            className="w-full"
-          />
-        </View>
-        <View className="flex flex-row justify-center items-center gap-2">
-          <Text className="text-xl text-white font-medium">{terms}</Text>
-          <Pressable onPress={() => navigation.navigate('Register')}>
-            <Text className="text-xl text-primary font-medium">
-              {button_register}
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          className="flex-1 flex flex-col gap-4"
+        >
+          <View className="flex justify-center items-center w-full">
+            <Image
+              source={require('../assets/bg.png')}
+              className="w-full h-[250px] bg-cover bg-center"
+            />
+          </View>
+          <View className="py-4">
+            <Text className="w-full text-center text-white text-2xl font-bold">
+              {title}
             </Text>
-          </Pressable>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+          </View>
+          <View>
+            <Inputfield
+              inputProps={{
+                keyboardType: 'email-address',
+                autoCapitalize: 'none',
+                placeholder: input_email
+              }}
+              onChange={(e) => setEmail(e)}
+              value={email}
+              className="w-full"
+            />
+          </View>
+          <View>
+            <Inputfield
+              inputProps={{
+                secureTextEntry: !open,
+                placeholder: input_password
+              }}
+              onChange={(e) => setPassword(e)}
+              value={password}
+              className="w-full"
+              iconRight={
+                <View>
+                  {open ? (
+                    <Pressable onPress={() => setOpen(false)}>
+                      <Octicons name="eye" size={24} color={'white'} />
+                    </Pressable>
+                  ) : (
+                    <Pressable onPress={() => setOpen(true)}>
+                      <Octicons name="eye-closed" size={24} color={'white'} />
+                    </Pressable>
+                  )}
+                </View>
+              }
+            />
+          </View>
+          <View>
+            <Button
+              label={button_login}
+              onPress={handleLogin}
+              className="w-full"
+            />
+          </View>
+          <View className="flex flex-row justify-center items-center gap-2">
+            <Text className="text-xl text-white font-medium">{terms}</Text>
+            <Pressable onPress={() => navigation.navigate('Register')}>
+              <Text className="text-xl text-primary font-medium">
+                {button_register}
+              </Text>
+            </Pressable>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
   )
 }
 

@@ -20,6 +20,7 @@ const MainDrawer = () => {
       initialRouteName="Home"
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={{
+        drawerType: 'slide',
         drawerStyle: {
           backgroundColor: '#1A1A1A', // Dark background
           height: '100%'
@@ -62,6 +63,7 @@ const MainDrawer = () => {
       <Drawer.Screen
         name="Chat"
         component={ChatScreen}
+        initialParams={{ conversationId: null, title: null }}
         options={{
           title: chat,
 

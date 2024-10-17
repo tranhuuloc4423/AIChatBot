@@ -2,6 +2,7 @@
 import React from 'react'
 import { View, Text, Pressable, TextInput } from 'react-native'
 import { Ionicons, Feather } from '@expo/vector-icons'
+import Dropdown from './Dropdown'
 
 interface ChatHeaderProps {
   currentTitle: string
@@ -9,7 +10,8 @@ interface ChatHeaderProps {
   isEditing: boolean
   setIsEditing: (editing: boolean) => void
   handleSaveTitle: () => void
-  goBack: () => void
+  onChangeType: () => void
+  type: string
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({
@@ -18,13 +20,19 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   isEditing,
   setIsEditing,
   handleSaveTitle,
-  goBack
+  onChangeType,
+  type
 }) => {
   return (
     <View className="flex fixed border-b border-gray-200 px-4 pb-2 flex-row justify-between items-center">
-      <Pressable onPress={goBack}>
-        <Ionicons name="close-outline" size={36} color={'white'} />
-      </Pressable>
+      {/* <Pressable onPress={onChangeType}>
+        {type === 'text' ? (
+          <Feather name="file-text" size={36} color={'white'} />
+        ) : (
+          <Feather name="image" size={36} color={'white'} />
+        )}
+      </Pressable> */}
+      <Dropdown />
       {isEditing ? (
         <View className="max-w-[50%]">
           <TextInput
@@ -42,11 +50,11 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
       )}
       {isEditing ? (
         <Pressable onPress={handleSaveTitle}>
-          <Feather name="check" size={28} color={'white'} />
+          <Feather name="check" size={24} color={'white'} />
         </Pressable>
       ) : (
         <Pressable onPress={() => setIsEditing(true)}>
-          <Feather name="edit" size={28} color={'white'} />
+          <Feather name="edit" size={24} color={'white'} />
         </Pressable>
       )}
     </View>

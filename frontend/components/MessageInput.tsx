@@ -10,17 +10,22 @@ interface MessageInputProps {
   text: string
   setText: (text: string) => void
   handleSendMessage: () => void
+  onLayout: (e: any) => void
 }
 
 const MessageInput: React.FC<MessageInputProps> = ({
   text,
   setText,
-  handleSendMessage
+  handleSendMessage,
+  onLayout
 }) => {
   const { language } = useAppSelector((state) => state.app)
   const { input } = langs[language as keyof Langs]?.chat
   return (
-    <View className="flex flex-row gap-2 items-center px-4 py-6 border-t-gray-200 border-t border-r border-l rounded-t-3xl">
+    <View
+      onLayout={onLayout}
+      className="flex flex-row gap-2 items-center px-4 py-3 border-t-gray-200 border-t border-r border-l rounded-t-3xl"
+    >
       <View className="flex-1">
         <Input
           value={text}
@@ -31,9 +36,9 @@ const MessageInput: React.FC<MessageInputProps> = ({
       </View>
       <TouchableOpacity
         onPress={handleSendMessage}
-        className="bg-primary rounded-full w-10 h-10 flex justify-center items-center"
+        className="bg-primary rounded-full w-14 h-14 flex justify-center items-center"
       >
-        <Ionicons name="send" size={24} color={'white'} />
+        <Ionicons name="send" size={32} color={'white'} />
       </TouchableOpacity>
     </View>
   )

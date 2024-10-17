@@ -4,6 +4,7 @@ const messageSchema = new mongoose.Schema(
   {
     role: { type: String, enum: ['user', 'assistant'], required: true },
     content: { type: String, required: true },
+    type: { type: String, enum: ['text', 'image'], required: true },
     conversation: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Conversation',

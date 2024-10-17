@@ -21,6 +21,7 @@ import {
   AboutScreen,
   Drawer
 } from './screens'
+import { MenuProvider } from 'react-native-popup-menu'
 
 const Stack = createNativeStackNavigator()
 
@@ -71,9 +72,11 @@ const AppNavigator = () => {
 export default function App() {
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <AppNavigator />
-      </NavigationContainer>
+      <MenuProvider>
+        <NavigationContainer>
+          <AppNavigator />
+        </NavigationContainer>
+      </MenuProvider>
     </Provider>
   )
 }
