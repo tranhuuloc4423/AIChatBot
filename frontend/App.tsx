@@ -39,7 +39,7 @@ const AppNavigator = () => {
         const currentTime = Date.now() / 1000
 
         if ((decodedToken.exp ?? 0) < currentTime) {
-          logoutUser(dispatch)
+          logoutUser(dispatch, navigation)
           navigation.navigate('Login')
         } else {
           dispatch(loginSuccess({ token, user }))

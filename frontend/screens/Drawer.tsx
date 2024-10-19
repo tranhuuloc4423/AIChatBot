@@ -66,7 +66,6 @@ const MainDrawer = () => {
         initialParams={{ conversationId: null, title: null }}
         options={{
           title: chat,
-
           drawerIcon: ({ color, size }) => (
             <Ionicons name="chatbubbles-outline" color={color} size={size} />
           )

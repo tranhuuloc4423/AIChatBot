@@ -29,7 +29,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, loading }) => {
   }
   const copyToClipboard = async () => {
     await Clipboard.setStringAsync(content)
-    Alert.alert('Copied to clipboard!', content)
+    Alert.alert('Copied to clipboard!')
   }
 
   const saveImage = async () => {
@@ -74,20 +74,20 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, loading }) => {
           className="w-10 h-10 rounded-full mr-2"
         />
       )}
-      <View className="flex flex-col max-w-[75%] w-fit gap-2">
+      <View className="flex flex-col w-fit gap-2">
         <View
-          className={`p-2 rounded-lg border border-gray-200 w-full ${
+          className={`p-2 rounded-lg border border-gray-200 w-fit ${
             role === 'user'
               ? 'bg-primary  rounded-tr-none'
               : 'bg-black-200  rounded-tl-none'
           }`}
         >
           {type === 'text' ? (
-            <View>
+            <View className="w-full">
               {content.includes('![Image](https://image.pollinations.ai') ? (
                 <Image
                   source={{ uri: extractUrl(content) || '' }}
-                  className="w-[250px] h-[250px] object-cover"
+                  className="w-full h-[250px] object-cover"
                 />
               ) : (
                 <Text

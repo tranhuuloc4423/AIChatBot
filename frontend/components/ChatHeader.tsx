@@ -10,8 +10,6 @@ interface ChatHeaderProps {
   isEditing: boolean
   setIsEditing: (editing: boolean) => void
   handleSaveTitle: () => void
-  onChangeType: () => void
-  type: string
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({
@@ -19,19 +17,10 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   setCurrentTitle,
   isEditing,
   setIsEditing,
-  handleSaveTitle,
-  onChangeType,
-  type
+  handleSaveTitle
 }) => {
   return (
     <View className="flex fixed border-b border-gray-200 px-4 pb-2 flex-row justify-between items-center">
-      {/* <Pressable onPress={onChangeType}>
-        {type === 'text' ? (
-          <Feather name="file-text" size={36} color={'white'} />
-        ) : (
-          <Feather name="image" size={36} color={'white'} />
-        )}
-      </Pressable> */}
       <Dropdown />
       {isEditing ? (
         <View className="max-w-[50%]">

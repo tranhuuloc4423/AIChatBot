@@ -9,7 +9,7 @@ import { verifyToken } from './controllers/authControllers.js'
 dotenv.config()
 
 const app = express()
-app.use(express.json())
+app.use(express.json({ limit: '100mb' }))
 
 app.use('/auth', authRoutes)
 app.use('/chat', verifyToken, chatRoutes)
