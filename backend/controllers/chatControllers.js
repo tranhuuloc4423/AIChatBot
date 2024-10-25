@@ -175,7 +175,7 @@ export const updateTitle = async (req, res) => {
 
 export const removeConversation = async (req, res) => {
   const { conversationId } = req.params
-  const { email } = req.body
+  // const { email } = req.body
 
   try {
     const conversation = await Conversation.findByIdAndDelete(conversationId)
@@ -184,14 +184,14 @@ export const removeConversation = async (req, res) => {
       return res.status(404).json({ msg: 'Conversation not found' })
     }
 
-    const user = await User.findOne(
-      { email: email },
-      { $pull: { conversations: conversationId } },
-      { new: true }
-    )
-    if (!user) {
-      return res.status(404).json({ msg: 'User not found' })
-    }
+    // const user = await User.findOne(
+    //   { email: email },
+    //   { $pull: { conversations: conversationId } },
+    //   { new: true }
+    // )
+    // if (!user) {
+    //   return res.status(404).json({ msg: 'User not found' })
+    // }
 
     res.json({ success: true, msg: 'remove succesfull' })
   } catch (error) {
