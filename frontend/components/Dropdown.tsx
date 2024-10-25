@@ -1,6 +1,6 @@
 import { Feather, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-import { Text } from 'react-native'
+import { Alert, Text } from 'react-native'
 import {
   Menu,
   MenuOptions,
@@ -8,9 +8,15 @@ import {
   MenuTrigger
 } from 'react-native-popup-menu'
 import { RouterProps } from '../types/navigation'
+import langs, { Langs } from '../utils/langs'
+import { useAppSelector } from '../redux/customHooks'
 
 const Dropdown = () => {
   const navigation = useNavigation<RouterProps['navigation']>()
+  const { language, token, user } = useAppSelector((state) => state.app)
+
+  const { create_chat, create_chat_success } =
+    langs[language as keyof Langs]?.chat
   return (
     <Menu>
       <MenuTrigger>
@@ -30,7 +36,7 @@ const Dropdown = () => {
         <MenuOption
           onSelect={() => {
             navigation.navigate('Chat', { title: null, conversationId: null })
-            alert(`Conversation created!`)
+            Alert.alert(create_chat_success)
           }}
           style={{
             display: 'flex',
@@ -40,7 +46,7 @@ const Dropdown = () => {
           }}
         >
           <Ionicons name="chatbubbles-outline" size={24} color={'white'} />
-          <Text className="text-white">New chat</Text>
+          <Text className="text-white">{create_chat}</Text>
         </MenuOption>
       </MenuOptions>
     </Menu>

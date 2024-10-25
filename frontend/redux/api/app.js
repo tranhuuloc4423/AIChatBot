@@ -34,7 +34,7 @@ export const createNewConversation = async (data, token) => {
   }
 }
 
-export const loginUser = async (data, dispatch, navigation) => {
+export const loginUser = async (data, dispatch, navigation, success, error) => {
   try {
     const res = await axios.post('/auth/login', data)
     await AsyncStorage.setItem('token', res?.data.token)
@@ -43,9 +43,10 @@ export const loginUser = async (data, dispatch, navigation) => {
     // dispatch(setLanguage(lang))
     dispatch(loginSuccess({ token: res?.data.token, user: res?.data.user }))
     navigation.navigate('Main')
-    Alert.alert('Đăng Nhập thành công !')
-  } catch (error) {
-    console.error('Đăng nhập thất bại', error)
+    Alert.alert(success)
+  } catch (err) {
+    Alert.alert(error)
+    console.error(err)
   }
 }
 

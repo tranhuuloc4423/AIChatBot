@@ -12,6 +12,8 @@ export interface LanguageSection {
     button_login: string
     terms: string
     button_register: string
+    success: string
+    error: string
   }
   register: {
     title: string
@@ -21,12 +23,29 @@ export interface LanguageSection {
     button_register: string
     terms: string
     button_login: string
+    success: string
+    error: string
+  }
+  home: {
+    title: string
+    button: string
   }
   chat: {
     titleChat: string
     text_started: string
     button_copy: string
     input: string
+    button_save: string
+    create_chat: string
+    create_chat_success: string
+    update_title: string
+    record: {
+      start: string
+      stop: string
+      transcript: string
+    }
+    save_title: string
+    copy_title: string
   }
   languge: {
     title: string
@@ -96,7 +115,9 @@ const langs: Langs = {
       input_password: 'Mật khẩu',
       button_login: 'Đăng nhập',
       terms: 'Chưa có tài khoản?',
-      button_register: 'Đăng ký'
+      button_register: 'Đăng ký',
+      success: 'Đăng nhập thành công',
+      error: 'Đăng nhập thất bại'
     },
     register: {
       title: 'Chào mừng đến với Ai chat bot',
@@ -105,13 +126,30 @@ const langs: Langs = {
       input_passwordComfirmed: 'Xác nhận mật khẩu',
       button_register: 'Đăng ký',
       terms: 'Đã có tài khoản?',
-      button_login: 'Đăng nhập'
+      button_login: 'Đăng nhập',
+      success: 'Đăng ký thành công',
+      error: 'Đăng ký thất bại'
+    },
+    home: {
+      title: 'Tôi có thể giúp gì cho bạn ?',
+      button: 'Bắt đầu trò chuyện'
     },
     chat: {
       titleChat: 'Tiêu đề',
       text_started: 'Bắt đầu trò chuyện!',
       button_copy: 'Sao chép',
-      input: 'Hỏi bất cứ điều gì...'
+      input: 'Hỏi bất cứ điều gì...',
+      button_save: 'lưu',
+      create_chat: 'Đoạn chat mới',
+      create_chat_success: 'Tạo đoạn chat mới thành công',
+      update_title: 'Cập nhật tiêu đề thành công',
+      record: {
+        start: 'Bắt đầu ghi âm',
+        stop: 'Đang ghi âm',
+        transcript: 'Đang dịch âm thanh...'
+      },
+      save_title: 'Lưu hình ảnh thành công',
+      copy_title: 'sao chép văn bản thành công'
     },
     languge: {
       title: 'Ngôn ngữ',
@@ -195,7 +233,9 @@ const langs: Langs = {
       input_password: 'Password',
       button_login: 'Login',
       terms: "Don't have an account?",
-      button_register: 'register'
+      button_register: 'register',
+      success: 'Login successfully',
+      error: 'Login failed'
     },
     register: {
       title: 'Welcome to Ai chat bot',
@@ -204,16 +244,33 @@ const langs: Langs = {
       input_passwordComfirmed: 'Password Comfirmed',
       button_register: 'Register',
       terms: 'Already have an account?',
-      button_login: 'Login'
+      button_login: 'Login',
+      success: 'Register successfully',
+      error: 'Register Failed'
+    },
+    home: {
+      title: 'What can I do to help you?',
+      button: 'Start new chat'
     },
     chat: {
       titleChat: 'Untitled',
       text_started: 'start conversation!',
       button_copy: 'Copy text',
-      input: 'Ask anything ...'
+      input: 'Ask anything ...',
+      button_save: 'save',
+      create_chat: 'New chat',
+      create_chat_success: 'Create new chat successfully',
+      update_title: 'Updated new title successfully',
+      record: {
+        start: 'Start recording',
+        stop: 'Stop recording',
+        transcript: 'Transcript...'
+      },
+      save_title: 'image saved',
+      copy_title: 'copy to clipboard'
     },
     languge: {
-      title: 'Languge',
+      title: 'Language',
       langugeText: {
         vietnamese: 'Vietnamese',
         english: 'English'

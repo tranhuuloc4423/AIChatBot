@@ -19,7 +19,8 @@ interface MessageBubbleProps {
 const MessageBubble: React.FC<MessageBubbleProps> = ({ message, loading }) => {
   const { language } = useAppSelector((state) => state.app)
   const { content, role, type } = message
-  const { button_copy } = langs[language as keyof Langs]?.chat
+  const { button_copy, button_save, save_title, copy_title } =
+    langs[language as keyof Langs]?.chat
 
   const extractUrl = (inputString: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/ // Biểu thức chính quy tìm URL
@@ -29,7 +30,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, loading }) => {
   }
   const copyToClipboard = async () => {
     await Clipboard.setStringAsync(content)
-    Alert.alert('Copied to clipboard!')
+    Alert.alert(copy_title)
   }
 
   const saveImage = async () => {
@@ -37,19 +38,13 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, loading }) => {
       const uri = content // Địa chỉ URL của ảnh
       const fileUri = FileSystem.documentDirectory + `image-${Date.now()}.jpg` // Đường dẫn tạm thời lưu ảnh
 
-      // Tải ảnh xuống thư mục tạm thời
       const response = await FileSystem.downloadAsync(uri, fileUri)
 
-      // Kiểm tra và cấp quyền truy cập vào thư viện ảnh
       const { status } = await MediaLibrary.requestPermissionsAsync()
 
       if (status === 'granted') {
-        // Lưu ảnh vào thư viện ảnh
         await MediaLibrary.createAssetAsync(response.uri)
-        Alert.alert(
-          'Image saved!',
-          'Your image has been saved to your device gallery.'
-        )
+        Alert.alert(save_title)
       } else {
         Alert.alert(
           'Permission Denied',
@@ -136,7 +131,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, loading }) => {
                 color="white"
                 className="bg-black-200"
               />
-              <Text className="text-white font-medium ml-2">{button_copy}</Text>
+              <Text className="text-white font-medium ml-2">{button_save}</Text>
             </Pressable>
           </View>
         )}

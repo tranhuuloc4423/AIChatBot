@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Pressable,
-  ScrollView
+  ScrollView,
+  Alert
 } from 'react-native'
 import React, { useState } from 'react'
 import Input from '../components/Input'
@@ -31,6 +32,8 @@ const RegisterScreen = ({ navigation }: RouterProps) => {
     input_password,
     button_register,
     button_login,
+    success,
+    error,
     input_passwordComfirmed,
     terms
   } = langs[language as keyof Langs]?.register
@@ -42,10 +45,12 @@ const RegisterScreen = ({ navigation }: RouterProps) => {
         password
       }
       const res = await axios.post('/auth/register', register)
-      console.log(res.data)
+      // console.log(res.data)
+      Alert.alert(success)
       navigation.navigate('Login')
-    } catch (error) {
-      console.log(error)
+    } catch (err) {
+      Alert.alert(error)
+      console.log(err)
     }
   }
 

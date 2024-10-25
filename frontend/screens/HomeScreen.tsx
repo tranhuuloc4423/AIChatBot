@@ -94,7 +94,7 @@ const HomeScreen = ({ navigation }: RouterProps) => {
             </Text>
           </View>
           <Pressable
-            onPress={() => navigation.navigate('Chat')}
+            onPress={() => navigation.navigate('Chat', { image: false })}
             className="flex flex-row items-center justify-between py-2 px-6 bg-primary w-full rounded-full"
           >
             <View>

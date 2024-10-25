@@ -27,6 +27,8 @@ const LoginScreen = ({ navigation }: RouterProps) => {
     input_email,
     input_password,
     button_login,
+    error,
+    success,
     terms,
     button_register
   } = langs[language as keyof Langs]?.login
@@ -36,7 +38,7 @@ const LoginScreen = ({ navigation }: RouterProps) => {
       email,
       password
     }
-    loginUser(data, dispatch, navigation)
+    loginUser(data, dispatch, navigation, success, error)
   }
 
   return (

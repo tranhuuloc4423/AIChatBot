@@ -231,12 +231,12 @@ export const removeConversation = async (req, res) => {
 
 const API_KEY_ID = process.env.SPEECHFLOW_API_KEY_ID
 const API_KEY_SECRET = process.env.SPEECHFLOW_API_KEY_SECRET
-const LANG = 'en' // Mã ngôn ngữ
 const RESULT_TYPE = 1 // Kết quả dạng JSON
 
 export const speechToText = async (req, res) => {
   const data = req.body
   const base64Audio = data?.audioUrl?.split(',')[1] // Extract base64 content
+  const lang = data?.lang
 
   if (!base64Audio) return res.status(422).send('No audio data was provided.')
 
@@ -245,7 +245,7 @@ export const speechToText = async (req, res) => {
     console.log('245', audioUrl)
     // Upload audio to Cloudinary
     const createData = querystring.stringify({
-      lang: LANG,
+      lang: lang,
       remotePath: audioUrl // Use the Cloudinary URL
     })
 
