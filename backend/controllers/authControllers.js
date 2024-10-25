@@ -68,6 +68,16 @@ export const getById = async (req, res) => {
   }
 }
 
+// export const getAll = async (req, res) => {
+//   try {
+//     const user = await User.find()
+//     res.status(200).json(user)
+//   } catch (error) {
+//     console.error(error)
+//     res.status(500).json({ message: 'Lỗi máy chủ: ' + error.message })
+//   }
+// }
+
 export const verifyToken = (req, res, next) => {
   const token = req.header('Authorization')
 
