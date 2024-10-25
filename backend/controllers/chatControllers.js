@@ -9,9 +9,6 @@ import {
 import dotenv from 'dotenv'
 import https from 'https'
 import querystring from 'querystring'
-import path from 'path'
-import { randomUUID } from 'crypto'
-import fs from 'fs'
 
 dotenv.config()
 
@@ -178,12 +175,22 @@ export const updateTitle = async (req, res) => {
 
 export const removeConversation = async (req, res) => {
   const { conversationId } = req.params
+  const { email } = req.body
 
   try {
     const conversation = await Conversation.findByIdAndDelete(conversationId)
 
     if (!conversation) {
       return res.status(404).json({ msg: 'Conversation not found' })
+    }
+
+    const user = await User.findOne(
+      { email: email },
+      { $pull: { conversations: conversationId } },
+      { new: true }
+    )
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' })
     }
 
     res.json({ success: true, msg: 'remove succesfull' })
