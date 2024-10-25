@@ -15,7 +15,7 @@ import MessageList from '../components/MessageList'
 
 const ChatScreen = ({ navigation, route }: RouterProps) => {
   const { language, token, user } = useAppSelector((state) => state.app)
-  const { conversationId, title }: any = route?.params
+  const { conversationId, title, image }: any = route?.params
   const { text_started } = langs[language as keyof Langs]?.chat
 
   const [messages, setMessages] = useState<
@@ -34,7 +34,7 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
   const [inputHeight, setInputHeight] = useState(0)
 
   // record
-  const [recording, setRecording] = useState<Audio.Recording | null>(null)
+  const [isTranscripting, setIsTranscripting] = useState<boolean>(false)
   const [isRecording, setIsRecording] = useState(false)
   const [textResult, setTextResult] = useState('')
   const recordingRef = useRef<Audio.Recording | null>(null)
@@ -164,12 +164,20 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
     }
   }, [blocks])
 
+  useEffect(() => {
+    if (image) {
+      setBlocks(['image'])
+      setType('image')
+    }
+  }, [image])
+
   const sendAudioToBackend = async (audioFile: string) => {
     try {
+      setIsTranscripting(true)
       const response = await axios.post(
         '/chat/convert-speech',
         {
-          audioUrl: audioFile
+          audioUrl: `data:audio/wav;base64,${audioFile}`
         },
         {
           headers: {
@@ -178,9 +186,11 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
           }
         }
       )
+
       const result = await response.data
       console.log('Speech-to-Text Result:', result)
-      setTextResult(result)
+      setIsTranscripting(false)
+      setText(result)
     } catch (error) {
       console.error('Error sending audio to backend', error)
     }
@@ -199,11 +209,37 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true
       })
-
+      const recordingOptions = {
+        android: {
+          extension: '.wav',
+          outputFormat: Audio.AndroidOutputFormat.DEFAULT,
+          audioEncoder: Audio.AndroidAudioEncoder.DEFAULT,
+          sampleRate: 44100,
+          numberOfChannels: 2,
+          bitRate: 128000
+        },
+        ios: {
+          extension: '.wav',
+          outputFormat: Audio.IOSOutputFormat.LINEARPCM,
+          audioQuality: Audio.IOSAudioQuality.HIGH,
+          sampleRate: 44100,
+          numberOfChannels: 2,
+          bitRate: 128000,
+          linearPCMBitDepth: 16,
+          linearPCMIsBigEndian: false,
+          linearPCMIsFloat: false
+        },
+        web: {
+          // Add your web-specific recording options here
+          // For example:
+          codec: 'opus',
+          sampleRate: 48000,
+          numberOfChannels: 2,
+          bitRate: 128000
+        }
+      }
       const recording = new Audio.Recording()
-      await recording.prepareToRecordAsync(
-        Audio.RecordingOptionsPresets.HIGH_QUALITY
-      )
+      await recording.prepareToRecordAsync(recordingOptions)
       await recording.startAsync()
 
       // Set state and reference for recording
@@ -264,10 +300,15 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
         setBlocks={setBlocks}
       />
       <Button
-        title={isRecording ? 'Stop Recording' : 'Start Recording'}
+        title={
+          isTranscripting
+            ? 'Transcripting...'
+            : isRecording
+            ? 'Stop Recording'
+            : 'Start Recording'
+        }
         onPress={isRecording ? stopRecording : startRecording}
       />
-      <View>{textResult && <Text>{textResult}</Text>}</View>
     </KeyboardAvoidingView>
   )
 }

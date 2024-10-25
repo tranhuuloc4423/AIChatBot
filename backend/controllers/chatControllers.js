@@ -3,11 +3,16 @@ import { User } from '../models/User.js'
 import { Message } from '../models/Message.js'
 import {
   pollinationsImageApiCall,
-  pollinationsTextApiCall
+  pollinationsTextApiCall,
+  uploadAudio
 } from '../utils/api.js'
 import dotenv from 'dotenv'
 import https from 'https'
 import querystring from 'querystring'
+import path from 'path'
+import { randomUUID } from 'crypto'
+import fs from 'fs'
+
 dotenv.config()
 
 export const newConversation = async (req, res) => {
@@ -231,108 +236,107 @@ const RESULT_TYPE = 1 // Kết quả dạng JSON
 
 export const speechToText = async (req, res) => {
   const data = req.body
-  const audioUrl = data?.audioUrl
+  const base64Audio = data?.audioUrl?.split(',')[1] // Extract base64 content
 
-  console.log('Running speech to text')
-
-  if (!audioUrl) return res.status(422).send('No audio URL was provided.')
+  if (!base64Audio) return res.status(422).send('No audio data was provided.')
 
   try {
-    console.log('Submitting a remote file')
-
-    // Tạo dữ liệu để gửi
+    const audioUrl = await uploadAudio(base64Audio)
+    console.log('245', audioUrl)
+    // Upload audio to Cloudinary
     const createData = querystring.stringify({
       lang: LANG,
-      remotePath: audioUrl
+      remotePath: audioUrl // Use the Cloudinary URL
     })
 
-    // Tạo yêu cầu đến SpeechFlow
-    const createRequest = https.request(
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': createData.length,
-          keyId: API_KEY_ID,
-          keySecret: API_KEY_SECRET
-        },
-        hostname: 'api.speechflow.io',
-        path: '/asr/file/v1/create'
+    const createRequest = https.request({
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': createData.length,
+        keyId: API_KEY_ID,
+        keySecret: API_KEY_SECRET
       },
-      (createResponse) => {
-        let responseData = ''
+      body: createData,
+      hostname: 'api.speechflow.io',
+      path: '/asr/file/v1/create'
+    })
 
-        createResponse.on('data', (chunk) => {
-          responseData += chunk
-        })
+    createRequest.on('response', (createResponse) => {
+      let responseData = ''
 
-        createResponse.on('end', () => {
-          const responseJSON = JSON.parse(responseData)
-          console.log(responseJSON)
-          if (responseJSON.code === 10000) {
-            const taskId = responseJSON.taskId
-            checkTranscriptionResult(taskId)
-          } else {
-            console.log('Create error:', responseJSON.msg)
-            return res.status(500).send(responseJSON.msg)
-          }
-        })
-      }
-    )
+      createResponse.on('data', (chunk) => {
+        responseData += chunk
+      })
+
+      createResponse.on('end', () => {
+        let taskId
+        const responseJSON = JSON.parse(responseData)
+        console.log('Create response:', responseJSON)
+        if (responseJSON.code === 10000) {
+          taskId = responseJSON.taskId
+
+          const intervalID = setInterval(() => {
+            const queryRequest = https.request(
+              {
+                method: 'GET',
+                headers: {
+                  keyId: API_KEY_ID,
+                  keySecret: API_KEY_SECRET
+                },
+                hostname: 'api.speechflow.io',
+                path: `/asr/file/v1/query?taskId=${taskId}&resultType=${RESULT_TYPE}`
+              },
+              (queryResponse) => {
+                let responseData = ''
+
+                queryResponse.on('data', (chunk) => {
+                  responseData += chunk
+                })
+
+                queryResponse.on('end', () => {
+                  const responseJSON = JSON.parse(responseData)
+                  if (responseJSON.code === 11000) {
+                    const result = JSON.parse(responseJSON.result)
+                    const transcribedText = result.sentences[0]?.words
+                      .map((word) => word.w)
+                      .join(' ')
+                    console.log('Transcription result:', result)
+                    console.log('Transcription result:', transcribedText)
+                    clearInterval(intervalID)
+                    res.send(transcribedText) // Send the transcription result
+                  } else if (responseJSON.code === 11001) {
+                    console.log('Waiting for transcription...')
+                  } else {
+                    console.log('Transcription error:', responseJSON.msg)
+                    clearInterval(intervalID)
+                    return res.status(500).send(responseJSON.msg)
+                  }
+                })
+              }
+            )
+
+            queryRequest.on('error', (error) => {
+              console.error('Query error', error)
+            })
+            queryRequest.end()
+          }, 3000)
+        } else {
+          console.log('Create error:', responseJSON.msg)
+          return res.status(500).send(responseJSON.msg)
+        }
+      })
+    })
 
     createRequest.on('error', (error) => {
-      console.error(error)
-      return res.status(500).send('Request error')
+      console.error('Request error', error)
+      res.status(500).send('Request error')
     })
 
     createRequest.write(createData)
     createRequest.end()
-
-    // Hàm kiểm tra kết quả chuyển đổi
-    const checkTranscriptionResult = (taskId) => {
-      const intervalID = setInterval(() => {
-        const queryRequest = https.request(
-          {
-            method: 'GET',
-            headers: {
-              keyId: API_KEY_ID,
-              keySecret: API_KEY_SECRET
-            },
-            hostname: 'api.speechflow.io',
-            path: `/asr/file/v1/query?taskId=${taskId}&resultType=${RESULT_TYPE}`
-          },
-          (queryResponse) => {
-            let responseData = ''
-
-            queryResponse.on('data', (chunk) => {
-              responseData += chunk
-            })
-
-            queryResponse.on('end', () => {
-              const responseJSON = JSON.parse(responseData)
-              if (responseJSON.code === 11000) {
-                console.log('Transcription result:', responseData)
-                clearInterval(intervalID)
-                res.send(responseJSON) // Gửi kết quả cho client
-              } else if (responseJSON.code === 11001) {
-                console.log('Waiting for transcription...')
-              } else {
-                console.log('Transcription error:', responseJSON.msg)
-                clearInterval(intervalID)
-                return res.status(500).send(responseJSON.msg)
-              }
-            })
-          }
-        )
-
-        queryRequest.on('error', (error) => {
-          console.error(error)
-        })
-        queryRequest.end()
-      }, 3000)
-    }
   } catch (err) {
-    console.error('Error converting speech to text:', err)
-    res.status(500).send('An error occurred while converting speech to text.')
+    console.error('Error processing audio:', err.message)
+    res.status(500).send('Error processing audio', err.message)
   }
 }

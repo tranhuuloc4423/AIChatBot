@@ -74,7 +74,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, loading }) => {
           className="w-10 h-10 rounded-full mr-2"
         />
       )}
-      <View className="flex flex-col w-fit gap-2">
+      <View
+        className={`flex flex-col gap-2 ${role === 'user' ? 'w-fit' : 'w-4/5'}`}
+      >
         <View
           className={`p-2 rounded-lg border border-gray-200 w-fit ${
             role === 'user'

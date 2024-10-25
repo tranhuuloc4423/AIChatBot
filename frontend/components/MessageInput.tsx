@@ -62,7 +62,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
       onLayout={onLayout}
       className="flex flex-row gap-2 items-center px-4 py-3 border-t-gray-200 border-t border-r border-l rounded-t-3xl"
     >
-      <View className="flex-1 flex flex-row items-center border border-gray-100 rounded-lg p-4">
+      <View className="flex-1 flex flex-row items-center border border-gray-100 rounded-lg p-4 overflow-hidden">
         {blocks.map((block, index) => (
           <Chip
             key={index}
@@ -81,7 +81,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
           onChangeText={handleTextChange}
           onKeyPress={handleKeyPress}
           placeholder={input}
-          className="z-50 w-full text-xl text-white"
+          className="z-50 text-xl text-white w-[75%]"
           placeholderTextColor={'white'}
         />
       </View>
