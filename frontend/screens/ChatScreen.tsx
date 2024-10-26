@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { View, KeyboardAvoidingView, Alert, Button, Text } from 'react-native'
+import {
+  View,
+  KeyboardAvoidingView,
+  Alert,
+  Button,
+  Text,
+  Pressable
+} from 'react-native'
 
 import { RouterProps } from '../types/navigation'
 import { useAppSelector } from '../redux/customHooks'
@@ -10,11 +17,18 @@ import axios from '../axiosInstance'
 import langs, { Langs } from '../utils/langs'
 import { useFocusEffect } from '@react-navigation/native'
 import MessageList from '../components/MessageList'
+import { Audio } from 'expo-av'
+import * as FileSystem from 'expo-file-system'
+import * as Permissions from 'expo-permissions'
 
 const ChatScreen = ({ navigation, route }: RouterProps) => {
-  const { language, token, user } = useAppSelector((state) => state.app)
+  const {
+    token,
+    user: { language, email }
+  } = useAppSelector((state) => state.app)
   const { conversationId, title, image }: any = route?.params
-  const { update_title } = langs[language as keyof Langs]?.chat
+  const [lang, setLang] = useState<String>()
+  const { update_title, record } = langs[language as keyof Langs]?.chat
   const [messages, setMessages] = useState<
     Array<{ content: string; role: string; type: string }>
   >([])
@@ -31,6 +45,9 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
   const [inputHeight, setInputHeight] = useState(0)
 
   // record
+  const [isTranscripting, setIsTranscripting] = useState<boolean>(false)
+  const [isRecording, setIsRecording] = useState(false)
+  const recordingRef = useRef<Audio.Recording | null>(null)
 
   // const webAudioPermissionsRef = useRef<MediaStream | null>(null)
 
@@ -51,7 +68,7 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
 
   const createConversation = async () => {
     try {
-      const data = { email: user.email }
+      const data = { email: email }
       const res = await createNewConversation(data, token)
       setId(res?.conversationId)
       setCurrentTitle(res?.title)
@@ -126,6 +143,120 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
     }
   }
 
+  const sendAudioToBackend = async (audioFile: string) => {
+    try {
+      console.log(lang)
+      setIsTranscripting(true)
+      setText(record.transcript)
+      const response = await axios.post(
+        '/chat/convert-speech',
+        {
+          audioUrl: `data:audio/wav;base64,${audioFile}`,
+          lang: lang
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: token
+          }
+        }
+      )
+
+      const result = await response.data
+      console.log('Speech-to-Text Result:', result)
+      setIsTranscripting(false)
+      setText(result)
+      await handleSendMessage()
+    } catch (error) {
+      console.error('Error sending audio to backend', error)
+    }
+  }
+  const startRecording = async () => {
+    try {
+      // Request microphone permissions
+      const { status } = await Audio.requestPermissionsAsync()
+      if (status !== 'granted') {
+        alert('Permission to access microphone is required.')
+        return
+      }
+
+      // Prepare for recording
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true
+      })
+      const recordingOptions = {
+        android: {
+          extension: '.wav',
+          outputFormat: Audio.AndroidOutputFormat.DEFAULT,
+          audioEncoder: Audio.AndroidAudioEncoder.DEFAULT,
+          sampleRate: 44100,
+          numberOfChannels: 2,
+          bitRate: 128000
+        },
+        ios: {
+          extension: '.wav',
+          outputFormat: Audio.IOSOutputFormat.LINEARPCM,
+          audioQuality: Audio.IOSAudioQuality.HIGH,
+          sampleRate: 44100,
+          numberOfChannels: 2,
+          bitRate: 128000,
+          linearPCMBitDepth: 16,
+          linearPCMIsBigEndian: false,
+          linearPCMIsFloat: false
+        },
+        web: {
+          mimeType: 'audio/wav',
+          bitsPerSecond: 128000
+        }
+      }
+      const recording = new Audio.Recording()
+      await recording.prepareToRecordAsync(recordingOptions)
+      await recording.startAsync()
+
+      // Set state and reference for recording
+      recordingRef.current = recording
+      setIsRecording(true)
+    } catch (error) {
+      console.error('Failed to start recording', error)
+    }
+  }
+
+  const stopRecording = async () => {
+    if (!recordingRef.current) {
+      console.error('No active recording found')
+      return
+    }
+
+    try {
+      setIsRecording(false)
+
+      // Stop and unload the recording
+      await recordingRef.current.stopAndUnloadAsync()
+      const uri = recordingRef.current.getURI()
+      console.log('Recording stopped and stored at', uri)
+
+      // Reset recording reference
+      recordingRef.current = null
+
+      // Send audio to the backend
+      const audioFile = await FileSystem.readAsStringAsync(uri!, {
+        encoding: FileSystem.EncodingType.Base64
+      })
+      sendAudioToBackend(audioFile)
+    } catch (error) {
+      console.error('Error stopping the recording', error)
+    }
+  }
+
+  useEffect(() => {
+    if (language === 'vietnamese') {
+      setLang('vi')
+    } else {
+      setLang('en')
+    }
+  }, [language])
+
   useFocusEffect(
     useCallback(() => {
       // Reset state khi vào màn hình
@@ -190,6 +321,18 @@ const ChatScreen = ({ navigation, route }: RouterProps) => {
         blocks={blocks}
         setBlocks={setBlocks}
       />
+      <Pressable
+        onPress={isRecording ? stopRecording : startRecording}
+        className="pt-2 flex flex-row justify-center items-center"
+      >
+        <Text className="text-blue-600 text-xl py-2">
+          {isTranscripting
+            ? record.transcript
+            : isRecording
+            ? record.stop
+            : record.start}
+        </Text>
+      </Pressable>
     </KeyboardAvoidingView>
   )
 }

@@ -15,7 +15,8 @@ export const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt)
     const newUser = new User({
       email,
-      password: hashedPassword
+      password: hashedPassword,
+      language: 'english'
     })
 
     await newUser.save()
@@ -61,6 +62,26 @@ export const getById = async (req, res) => {
     if (!user) {
       return res.status(404).json({ msg: 'Không tìm thấy người dùng' })
     }
+    res.status(200).json(user)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ msg: 'Internal server error' })
+  }
+}
+
+export const ChangLang = async (req, res) => {
+  const { email, language } = req.body
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { email },
+      { $set: { language } },
+      { new: true }
+    )
+    if (!user) {
+      return res.status(404).json({ msg: 'Không tìm thấy người dùng' })
+    }
+
     res.status(200).json(user)
   } catch (error) {
     console.error(error)

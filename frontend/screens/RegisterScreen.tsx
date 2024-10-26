@@ -25,7 +25,9 @@ const RegisterScreen = ({ navigation }: RouterProps) => {
   const [passwordConfirmed, setPasswordConfirmed] = useState<string>('')
   const [open, setOpen] = useState<boolean>(false)
   const [openConfirm, setOpenConfirm] = useState<boolean>(false)
-  const { language } = useAppSelector((state) => state.app)
+  const {
+    user: { language }
+  } = useAppSelector((state) => state.app)
   const {
     title,
     input_email,

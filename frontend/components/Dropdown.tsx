@@ -13,7 +13,9 @@ import { useAppSelector } from '../redux/customHooks'
 
 const Dropdown = () => {
   const navigation = useNavigation<RouterProps['navigation']>()
-  const { language, token, user } = useAppSelector((state) => state.app)
+  const {
+    user: { language }
+  } = useAppSelector((state) => state.app)
 
   const { create_chat, create_chat_success } =
     langs[language as keyof Langs]?.chat

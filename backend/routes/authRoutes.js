@@ -2,7 +2,8 @@ import express from 'express'
 import {
   registerUser,
   loginUser,
-  getById
+  getById,
+  ChangLang
   // getAll
 } from '../controllers/authControllers.js'
 
@@ -12,5 +13,6 @@ router.get('/user', getById)
 // router.get('/', getAll)
 router.post('/register', registerUser)
 router.post('/login', loginUser)
+router.put('/language', ChangLang)
 
 export default router

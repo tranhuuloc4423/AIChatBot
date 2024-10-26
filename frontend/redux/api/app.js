@@ -37,12 +37,14 @@ export const createNewConversation = async (data, token) => {
 export const loginUser = async (data, dispatch, navigation, success, error) => {
   try {
     const res = await axios.post('/auth/login', data)
-    await AsyncStorage.setItem('token', res?.data.token)
-    await AsyncStorage.setItem('user', JSON.stringify(res?.data.user))
-    // const lang = await AsyncStorage.getItem('language')
-    // dispatch(setLanguage(lang))
+    await AsyncStorage.setItem('token', res?.data?.token)
+    await AsyncStorage.setItem('user', JSON.stringify(res?.data?.user))
+    await AsyncStorage.setItem(
+      'language',
+      JSON.stringify(res?.data?.user?.language)
+    )
     dispatch(loginSuccess({ token: res?.data.token, user: res?.data.user }))
-    navigation.navigate('Main')
+    navigation?.navigate('Main')
     Alert.alert(success)
   } catch (err) {
     Alert.alert(error)
@@ -59,7 +61,21 @@ export const logoutUser = async (dispatch, navigation) => {
   navigation.navigate('Login')
 }
 
-export const setLanguageApp = async (lang, dispatch) => {
-  await AsyncStorage.setItem('language', lang)
-  dispatch(setLanguage(lang))
+export const setLanguageApp = async (data, dispatch) => {
+  try {
+    const { email, token, lang } = data
+    await axios.put(
+      '/auth/language',
+      { email, language: lang },
+      {
+        headers: {
+          Authorization: token
+        }
+      }
+    )
+    await AsyncStorage.setItem('language', lang)
+    dispatch(setLanguage(lang))
+  } catch (error) {
+    console.log(error)
+  }
 }

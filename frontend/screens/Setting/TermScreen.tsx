@@ -6,7 +6,9 @@ import langs, { Langs } from '../../utils/langs'
 import { useAppSelector } from '../../redux/customHooks'
 
 const TermScreen = ({ navigation }: RouterProps) => {
-  const { language } = useAppSelector((state) => state.app)
+  const {
+    user: { language }
+  } = useAppSelector((state) => state.app)
   const { title, desc, terms } = langs[language as keyof Langs]?.term
   return (
     <View className="bg-black-100 h-full w-full px-4 pt-8 pb-4">

@@ -5,10 +5,10 @@ const initialState: AppState = {
   user: {
     email: null,
     password: null,
-    conversations: []
+    conversations: [],
+    language: 'english'
   },
-  token: null,
-  language: 'english'
+  token: null
 }
 
 const appSlice = createSlice({
@@ -31,10 +31,15 @@ const appSlice = createSlice({
     },
     logout: (state) => {
       state.token = null
-      state.user = { conversations: [], email: null, password: null }
+      state.user = {
+        conversations: [],
+        email: null,
+        password: null,
+        language: 'english'
+      }
     },
     setLanguage: (state, action) => {
-      state.language = action.payload
+      state.user.language = action.payload
     }
   }
 })

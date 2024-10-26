@@ -6,9 +6,10 @@ import { useAppSelector } from '../redux/customHooks'
 import langs, { Langs } from '../utils/langs'
 
 const SettingScreen = ({ navigation }: RouterProps) => {
-  const { language } = useAppSelector((state) => state.app)
   const {
-    title,
+    user: { language }
+  } = useAppSelector((state) => state.app)
+  const {
     buttonText: { about, term, languge }
   } = langs[language as keyof Langs]?.setting
   const supportOptions = [

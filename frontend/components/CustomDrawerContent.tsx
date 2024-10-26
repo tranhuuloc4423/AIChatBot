@@ -15,8 +15,9 @@ import langs, { Langs } from '../utils/langs'
 const CustomDrawerContent = (props: any) => {
   const navigation = useNavigation<RouterProps['navigation']>()
   const dispatch = useAppDispatch()
-  const { user } = useAppSelector((state) => state.app)
-  const { language } = useAppSelector((state) => state.app)
+  const {
+    user: { language, email }
+  } = useAppSelector((state) => state.app)
   const { title, cancel, desc } = langs[language as keyof Langs]?.other.logout
   const handleLogout = () => {
     Alert.alert(title, desc, [
@@ -44,9 +45,9 @@ const CustomDrawerContent = (props: any) => {
             source={require('../assets/furryna.jpg')}
             className="w-12 h-12 rounded-full mr-3"
           />
-          <View>
-            <Text className="text-white font-semibold text-2xl">
-              {user?.email}
+          <View className="w-full">
+            <Text className="text-white font-semibold text-xl truncate max-w-[160px] whitespace-nowrap overflow-hidden">
+              {email}
             </Text>
           </View>
         </View>

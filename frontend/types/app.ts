@@ -12,10 +12,10 @@ export interface User {
   email: string | null
   password: string | null
   conversations: string[]
+  language: string | 'english'
 }
 
 export interface AppState {
   user: User
   token: string | null
-  language: string
 }

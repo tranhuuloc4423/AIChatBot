@@ -29,6 +29,24 @@ export interface LanguageSection {
   home: {
     title: string
     button: string
+    features: [
+      {
+        title: string
+        desc: string
+      },
+      {
+        title: string
+        desc: string
+      },
+      {
+        title: string
+        desc: string
+      },
+      {
+        title: string
+        desc: string
+      }
+    ]
   }
   chat: {
     titleChat: string
@@ -78,6 +96,7 @@ export interface LanguageSection {
     title: string
     desc: string
     empty: string
+    remove_item: string
   }
   setting: {
     title: string
@@ -132,7 +151,25 @@ const langs: Langs = {
     },
     home: {
       title: 'Tôi có thể giúp gì cho bạn ?',
-      button: 'Bắt đầu trò chuyện'
+      button: 'Bắt đầu trò chuyện',
+      features: [
+        {
+          title: 'Trò chuyện',
+          desc: 'Thử với trí tuệ nhân tạo'
+        },
+        {
+          title: 'Hình ảnh',
+          desc: 'Thử tạo hình ảnh'
+        },
+        {
+          title: 'Lịch sử',
+          desc: 'Lịch sử trò chuyện'
+        },
+        {
+          title: 'Cài đặt',
+          desc: 'Xem các tính năng'
+        }
+      ]
     },
     chat: {
       titleChat: 'Tiêu đề',
@@ -145,7 +182,7 @@ const langs: Langs = {
       update_title: 'Cập nhật tiêu đề thành công',
       record: {
         start: 'Bắt đầu ghi âm',
-        stop: 'Đang ghi âm',
+        stop: 'Dừng ghi âm',
         transcript: 'Đang dịch âm thanh...'
       },
       save_title: 'Lưu hình ảnh thành công',
@@ -202,7 +239,8 @@ const langs: Langs = {
     history: {
       title: 'Lịch sử',
       desc: 'Các chủ đề',
-      empty: 'Chưa có lịch sử trò chuyện nào'
+      empty: 'Chưa có lịch sử trò chuyện nào',
+      remove_item: 'Xoá lịch sử thành công'
     },
     setting: {
       title: 'Cài đặt',
@@ -250,7 +288,25 @@ const langs: Langs = {
     },
     home: {
       title: 'What can I do to help you?',
-      button: 'Start new chat'
+      button: 'Start new chat',
+      features: [
+        {
+          title: 'Chat',
+          desc: 'Try chat with AI'
+        },
+        {
+          title: 'Image',
+          desc: 'Generate images'
+        },
+        {
+          title: 'History',
+          desc: 'Chat history'
+        },
+        {
+          title: 'Settings',
+          desc: 'View our features'
+        }
+      ]
     },
     chat: {
       titleChat: 'Untitled',
@@ -320,7 +376,8 @@ const langs: Langs = {
     history: {
       title: 'History',
       desc: 'Topics',
-      empty: 'No history chat'
+      empty: 'No history chat',
+      remove_item: 'Removed history successfully'
     },
     setting: {
       title: 'Settings',

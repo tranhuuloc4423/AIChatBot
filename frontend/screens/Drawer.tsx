@@ -12,7 +12,9 @@ import langs, { Langs } from '../utils/langs'
 const Drawer = createDrawerNavigator()
 
 const MainDrawer = () => {
-  const { language } = useAppSelector((state) => state.app)
+  const {
+    user: { language }
+  } = useAppSelector((state) => state.app)
   const { chat, history, home, setting } =
     langs[language as keyof Langs]?.buttonScreen
   return (

@@ -11,12 +11,13 @@ import { RouterProps } from '../types/navigation'
 import { useAppSelector } from '../redux/customHooks'
 import axios from '../axiosInstance'
 import langs, { Langs } from '../utils/langs'
+import { useFocusEffect } from '@react-navigation/native'
 
 const HistoryScreen = ({ navigation }: RouterProps) => {
   const { language, token, user } = useAppSelector((state) => state.app)
   const [history, setHistory] = useState([])
 
-  const { empty } = langs[language as keyof Langs]?.history
+  const { empty, remove_item } = langs[language as keyof Langs]?.history
 
   const getHistory = async () => {
     try {
@@ -41,15 +42,19 @@ const HistoryScreen = ({ navigation }: RouterProps) => {
           Authorization: token
         }
       })
-      Alert.alert('Xoá cuộc trò chuyện thành công !')
+      Alert.alert(remove_item)
     } catch (error) {
       console.log(error)
     }
   }
 
-  useEffect(() => {
-    getHistory()
-  }, [history])
+  useFocusEffect(
+    useCallback(() => {
+      getHistory()
+      // Clean-up function
+      return () => {}
+    }, [history])
+  )
 
   return (
     <KeyboardAvoidingView

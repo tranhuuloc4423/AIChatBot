@@ -178,20 +178,21 @@ export const removeConversation = async (req, res) => {
   // const { email } = req.body
 
   try {
-    const conversation = await Conversation.findByIdAndDelete(conversationId)
-
-    if (!conversation) {
-      return res.status(404).json({ msg: 'Conversation not found' })
-    }
-
     // const user = await User.findOne(
     //   { email: email },
     //   { $pull: { conversations: conversationId } },
     //   { new: true }
     // )
+
     // if (!user) {
     //   return res.status(404).json({ msg: 'User not found' })
     // }
+
+    const conversation = await Conversation.findByIdAndDelete(conversationId)
+
+    if (!conversation) {
+      return res.status(404).json({ msg: 'Conversation not found' })
+    }
 
     res.json({ success: true, msg: 'remove succesfull' })
   } catch (error) {
@@ -199,42 +200,6 @@ export const removeConversation = async (req, res) => {
     res.status(500).json({ msg: 'Internal server error' })
   }
 }
-
-// export const speechToText = async (req, res) => {
-//   const data = req.body
-//   const audioUrl = data?.audioUrl
-//   const audioConfig = data?.config
-//   console.log('running speech to text')
-
-//   if (!audioUrl) return res.status(422).send('No audio URL was provided.')
-//   if (!audioConfig) return res.status(422).send('No audio config was provided.')
-//   try {
-//     console.log('check speech to text')
-
-//     const speechResults = await fetch(
-//       'https://speech.googleapis.com/v1/speech:recognize',
-//       {
-//         method: 'POST',
-//         body: JSON.stringify({
-//           audio: {
-//             content: audioUrl
-//           },
-//           config: audioConfig
-//         }),
-//         headers: {
-//           Accept: 'application/json',
-//           'Content-Type': 'application/json',
-//           'X-goog-api-key': `${process.env.GOOGLE_SPEECH_TO_TEXT_API_KEY}`
-//         }
-//       }
-//     ).then((response) => response.json())
-//     return res.send(speechResults)
-//   } catch (err) {
-//     console.error('Error converting speech to text: ', err)
-//     res.status(404).send(err)
-//     return err
-//   }
-// }
 
 const API_KEY_ID = process.env.SPEECHFLOW_API_KEY_ID
 const API_KEY_SECRET = process.env.SPEECHFLOW_API_KEY_SECRET

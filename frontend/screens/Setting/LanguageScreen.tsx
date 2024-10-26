@@ -8,9 +8,14 @@ import { useAppSelector } from '../../redux/customHooks'
 import langs, { Langs } from '../../utils/langs'
 
 const LanguageScreen = ({ navigation }: RouterProps) => {
-  const { language } = useAppSelector((state) => state.app)
+  const {
+    user: { language, email },
+    token
+  } = useAppSelector((state) => state.app)
   const dispatch = useDispatch()
-  const [selectedLanguage, setSelectedLanguage] = useState<string>(language)
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(
+    language || ''
+  )
 
   const {
     title,
@@ -34,9 +39,14 @@ const LanguageScreen = ({ navigation }: RouterProps) => {
     }
   ]
 
-  const handleLanguageSelection = (value: string) => {
-    setSelectedLanguage(value)
-    setLanguageApp(value, dispatch)
+  const handleLanguageSelection = (lang: string) => {
+    setSelectedLanguage(lang)
+    const data = {
+      email,
+      lang,
+      token
+    }
+    setLanguageApp(data, dispatch)
   }
 
   return (

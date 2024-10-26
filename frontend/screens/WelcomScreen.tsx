@@ -1,12 +1,17 @@
 import { View, Text, Image, TouchableOpacity, Pressable } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { RouterProps } from '../types/navigation'
 import Button from '../components/Button'
 import langs, { Langs } from '../utils/langs'
 import { useAppSelector } from '../redux/customHooks'
 const WelcomeScreen = ({ navigation }: RouterProps) => {
-  const { language } = useAppSelector((state) => state.app)
+  const {
+    user: { language }
+  } = useAppSelector((state) => state.app)
   const { title, desc, button, terms } = langs[language as keyof Langs]?.welcome
+  useEffect(() => {
+    console.log(title)
+  }, [])
   return (
     <View className=" bg-black-100 pt-20 px-8 h-full w-full">
       <View className="flex flex-col gap-8">

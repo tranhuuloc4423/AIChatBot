@@ -33,7 +33,9 @@ const teamMembers = [
 ]
 
 const TermScreen = ({ navigation }: RouterProps) => {
-  const { language } = useAppSelector((state) => state.app)
+  const {
+    user: { language }
+  } = useAppSelector((state) => state.app)
   const { title } = langs[language as keyof Langs]?.about
   return (
     <View className="bg-black-100 h-full w-full px-4 pb-4 pt-8">

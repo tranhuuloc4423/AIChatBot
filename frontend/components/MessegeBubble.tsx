@@ -17,7 +17,9 @@ interface MessageBubbleProps {
 }
 
 const MessageBubble: React.FC<MessageBubbleProps> = ({ message, loading }) => {
-  const { language } = useAppSelector((state) => state.app)
+  const {
+    user: { language }
+  } = useAppSelector((state) => state.app)
   const { content, role, type } = message
   const { button_copy, button_save, save_title, copy_title } =
     langs[language as keyof Langs]?.chat

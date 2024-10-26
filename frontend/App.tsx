@@ -3,14 +3,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import store from './redux/store'
 import { Provider, useDispatch } from 'react-redux'
-import { View } from 'react-native'
 import { RouterProps } from './types/navigation'
-import Tags from './components/Tags'
 import { useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { jwtDecode } from 'jwt-decode'
 import { loginSuccess } from './redux/slices/appSlice'
-import { logoutUser } from './redux/api/app'
+import { logoutUser, setLanguageApp } from './redux/api/app'
 import {
   HomeScreen,
   LoginScreen,
@@ -31,23 +29,22 @@ const AppNavigator = () => {
 
   useEffect(() => {
     const checkToken = async () => {
-      const token = await AsyncStorage.getItem('token')
+      const token = (await AsyncStorage.getItem('token')) || undefined
       const user = JSON.parse((await AsyncStorage.getItem('user')) || '{}')
-
+      const lang = JSON.parse((await AsyncStorage.getItem('language')) || '{}')
       if (token) {
         const decodedToken = jwtDecode(token)
         const currentTime = Date.now() / 1000
-
         if ((decodedToken.exp ?? 0) < currentTime) {
           logoutUser(dispatch, navigation)
           navigation.navigate('Login')
         } else {
           dispatch(loginSuccess({ token, user }))
+          setLanguageApp(lang, dispatch)
           navigation.navigate('Main')
         }
       }
     }
-
     checkToken()
   }, [dispatch, navigation])
 

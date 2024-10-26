@@ -21,7 +21,9 @@ const LoginScreen = ({ navigation }: RouterProps) => {
   const [password, setPassword] = useState<string>('')
   const [open, setOpen] = useState<boolean>(false)
   const dispatch = useAppDispatch()
-  const { language } = useAppSelector((state) => state.app)
+  const {
+    user: { language }
+  } = useAppSelector((state) => state.app)
   const {
     title,
     input_email,
