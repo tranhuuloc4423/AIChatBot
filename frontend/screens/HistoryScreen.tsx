@@ -14,7 +14,7 @@ import langs, { Langs } from '../utils/langs'
 import { useFocusEffect } from '@react-navigation/native'
 
 const HistoryScreen = ({ navigation }: RouterProps) => {
-  const { language, token, user } = useAppSelector((state) => state.app)
+  const { token, user:{language, email} } = useAppSelector((state) => state.app)
   const [history, setHistory] = useState([])
 
   const { empty, remove_item } = langs[language as keyof Langs]?.history
@@ -26,7 +26,7 @@ const HistoryScreen = ({ navigation }: RouterProps) => {
           Authorization: token
         },
         params: {
-          email: user.email
+          email: email
         }
       })
       setHistory(res.data)
