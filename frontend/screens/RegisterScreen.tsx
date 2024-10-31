@@ -47,9 +47,8 @@ const RegisterScreen = ({ navigation }: RouterProps) => {
         password
       }
       const res = await axios.post('/auth/register', register)
-      // console.log(res.data)
       Alert.alert(success)
-      navigation.navigate('Login')
+      navigation.navigate('Login', { username: email, pass: password })
     } catch (err) {
       Alert.alert(error)
       console.log(err)

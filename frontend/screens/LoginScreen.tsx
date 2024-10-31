@@ -8,7 +8,7 @@ import {
   ScrollView,
   Alert
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Button from '../components/Button'
 import { Octicons } from '@expo/vector-icons'
 import Inputfield from '../components/Inputfield'
@@ -16,7 +16,10 @@ import { RouterProps } from '../types/navigation'
 import { useAppDispatch, useAppSelector } from '../redux/customHooks'
 import { loginUser } from '../redux/api/app'
 import langs, { Langs } from '../utils/langs'
-const LoginScreen = ({ navigation }: RouterProps) => {
+import { useFocusEffect } from '@react-navigation/native'
+const LoginScreen = ({ navigation, route }: RouterProps) => {
+  const username = route?.params?.username
+  const pass = route?.params?.pass
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [open, setOpen] = useState<boolean>(false)
@@ -42,6 +45,15 @@ const LoginScreen = ({ navigation }: RouterProps) => {
     }
     loginUser(data, dispatch, navigation, success, error)
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      if (username && pass) {
+        setEmail(username)
+        setPassword(pass)
+      }
+    }, [username, pass])
+  )
 
   return (
     <View className="flex-1 w-full h-full bg-black-100">

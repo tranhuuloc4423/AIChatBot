@@ -36,17 +36,21 @@ const CustomDrawerContent = (props: any) => {
   return (
     <DrawerContentScrollView
       {...props}
-      className="bg-dark flex flex-col justify-between h-full"
+      className="bg-dark flex flex-col justify-between h-full w-full"
     >
-      <View className="px-4 py-4 ">
+      <View className="px-4 py-4 w-full">
         {/* User Avatar and Email */}
         <View className="flex-row items-center mb-4">
           <Image
             source={require('../assets/furryna.jpg')}
             className="w-12 h-12 rounded-full mr-3"
           />
-          <View className="w-full">
-            <Text className="text-white font-semibold text-xl truncate max-w-[160px] whitespace-nowrap overflow-hidden">
+          <View className="w-full px-2">
+            <Text
+              className="text-white font-semibold text-xl w-[80%]"
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
               {email}
             </Text>
           </View>

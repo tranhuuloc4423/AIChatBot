@@ -384,7 +384,7 @@ const langs: Langs = {
       buttonText: {
         about: 'About us',
         term: 'Term of conditions',
-        languge: 'Languge'
+        languge: 'Language'
       }
     },
     other: {
