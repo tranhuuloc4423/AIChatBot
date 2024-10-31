@@ -85,7 +85,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
             onChangeText={handleTextChange}
             onKeyPress={handleKeyPress}
             placeholder={input}
-            className="z-50 text-xl text-white w-[100%]"
+            className="z-50 text-xl text-white w-[75%]"
             placeholderTextColor={'white'}
           />
         </View>

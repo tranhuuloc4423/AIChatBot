@@ -72,10 +72,12 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, loading }) => {
         />
       )}
       <View
-        className={`flex flex-col gap-2 ${role === 'user' ? 'w-fit' : 'w-4/5'}`}
+        className={`flex flex-col gap-2 ${
+          role === 'user' || loading ? 'w-fit' : 'w-4/5'
+        }`}
       >
         <View
-          className={`p-2 rounded-lg border border-gray-200 w-fit ${
+          className={`p-2 rounded-lg w-fit ${
             role === 'user'
               ? 'bg-primary  rounded-tr-none'
               : 'bg-black-200  rounded-tl-none'
@@ -86,7 +88,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, loading }) => {
               {content.includes('![Image](https://image.pollinations.ai') ? (
                 <Image
                   source={{ uri: extractUrl(content) || '' }}
-                  className="w-full h-[250px] object-cover"
+                  className="w-full h-[250px] object-cover rounded-lg"
                 />
               ) : (
                 <Text
@@ -101,7 +103,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ message, loading }) => {
           ) : (
             <Image
               source={{ uri: content }}
-              className="w-full h-[250px] object-cover"
+              className="w-full h-[250px] object-cover rounded-lg"
             />
           )}
         </View>
