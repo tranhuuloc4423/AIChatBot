@@ -57,7 +57,7 @@ export const logoutUser = async (dispatch, navigation) => {
   await AsyncStorage.removeItem('token')
   await AsyncStorage.removeItem('user')
   dispatch(logout())
-  navigation.navigate('Login')
+  navigation.navigate('Login', { username: '', pass: '' })
 }
 
 export const setLanguageApp = async (data, dispatch) => {
