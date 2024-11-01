@@ -13,7 +13,8 @@ const app = express()
 app.use(
   cors({
     origin: '*',
-    methods: 'GET,POST,PUT,DELETE'
+    methods: 'GET,POST,PUT,DELETE',
+    credentials: false
   })
 )
 app.use(express.json({ limit: '100mb' }))
