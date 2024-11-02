@@ -24,7 +24,6 @@
     "expo-device": "^6.0.2",
     "expo-file-system": "^17.0.1",
     "expo-media-library": "^16.0.5",
-    "expo-permissions": "^14.4.0",
     "expo-speech": "^12.0.2",
     "expo-speech-recognition": "^0.2.24",
     "expo-status-bar": "~1.12.1",

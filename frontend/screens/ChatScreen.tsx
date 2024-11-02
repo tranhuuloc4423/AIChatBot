@@ -19,7 +19,6 @@ import { useFocusEffect } from '@react-navigation/native'
 import MessageList from '../components/MessageList'
 import { Audio } from 'expo-av'
 import * as FileSystem from 'expo-file-system'
-import * as Permissions from 'expo-permissions'
 
 const ChatScreen = ({ navigation, route }: RouterProps) => {
   const {
