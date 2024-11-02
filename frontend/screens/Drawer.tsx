@@ -37,7 +37,7 @@ const MainDrawer = () => {
           borderBottomWidth: 0,
           elevation: 0,
           shadowOpacity: 0,
-          height: 80
+          height: 100
         },
         headerTintColor: '#ffffff', // Text color in the header
         headerTitleStyle: {
