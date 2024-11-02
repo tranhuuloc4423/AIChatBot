@@ -34,11 +34,6 @@ const WelcomeScreen = ({ navigation }: RouterProps) => {
             label={button}
           />
         </View>
-        <View className="flex flex-row justify-center items-center gap-2">
-          <Pressable onPress={() => navigation.navigate('Term')}>
-            <Text className="text-xl text-white font-medium">{terms}</Text>
-          </Pressable>
-        </View>
       </View>
     </View>
   )
